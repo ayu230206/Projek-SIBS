@@ -9,8 +9,14 @@ class Kampus extends Model
 {
     use HasFactory;
 
-    // Tambahkan baris ini untuk mendefinisikan nama tabel yang benar
-    protected $table = 'kampus'; 
+    // Nama tabel
+    protected $table = 'kampus';
+
+    // Menentukan custom primary key (jika tidak menggunakan 'id')
+    protected $primaryKey = 'kampus_id';
+
+    // Mematikan timestamps (created_at & updated_at) jika tabel tidak memilikinya
+    public $timestamps = false;
 
     protected $fillable = [
         'nama_kampus',

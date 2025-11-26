@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers\Mahasiswa;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Mahasiswa\Post;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        $user = Auth::user();
+        $posts = Post::with('user', 'comments', 'likes')
+                     ->orderBy('tanggal_post', 'desc')
+                     ->get();
+        return view('admin.mahasiswa.dashboard', [
+            'user' => $user
+        ]);
+    }
+}

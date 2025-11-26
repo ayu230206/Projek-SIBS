@@ -27,6 +27,13 @@ class DataKampusSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'nama_kampus' => 'Politeknik Caltex Riau (PCR)',
+                'alamat' => 'Jl. Umbansari No.1 Rumbai, Pekanbaru',
+                'status_kerjasama' => 'aktif', // Sesuaikan status jika diperlukan
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
