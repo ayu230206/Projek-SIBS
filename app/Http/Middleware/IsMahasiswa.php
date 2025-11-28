@@ -9,7 +9,7 @@ class IsMahasiswa
 {
     public function handle($request, Closure $next)
     {
-        // pastikan user login dan role = mahasiswa
+
         if (!Auth::check() || Auth::user()->role !== 'mahasiswa') {
             abort(403, 'Akses ditolak.');
         }

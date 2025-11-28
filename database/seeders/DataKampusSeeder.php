@@ -7,11 +7,18 @@ use Illuminate\Support\Facades\DB;
 
 class DataKampusSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        // MATIKAN FOREIGN KEY
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        // Kosongkan tabel (pakai delete, bukan truncate)
+        DB::table('kampus')->delete();
+
+        // HIDUPKAN KEMBALI
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        // Insert data baru
         DB::table('kampus')->insert([
             [
                 'nama_kampus' => 'Institut Teknologi Sawit Indonesia (ITSI)',
@@ -30,7 +37,7 @@ class DataKampusSeeder extends Seeder
             [
                 'nama_kampus' => 'Politeknik Caltex Riau (PCR)',
                 'alamat' => 'Jl. Umbansari No.1 Rumbai, Pekanbaru',
-                'status_kerjasama' => 'aktif', // Sesuaikan status jika diperlukan
+                'status_kerjasama' => 'aktif',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

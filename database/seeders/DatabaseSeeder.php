@@ -1,18 +1,16 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder{
-    /**
-     * Seed the application's database.
-     */
+class DatabaseSeeder extends Seeder
+{
     public function run(): void
     {
-        // Data Kampus harus dibuat DULUAN sebelum Mahasiswa menggunakannya
         $this->call([
-            DataKampusSeeder::class, // <-- Pindahkan ke ATAS
-            UserRoleSeeder::class,   // <-- Panggil setelah data kampus ada
+            DataKampusSeeder::class,
+            UserRoleSeeder::class,
         ]);
     }
 }

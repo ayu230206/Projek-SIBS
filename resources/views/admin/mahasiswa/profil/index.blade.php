@@ -7,7 +7,7 @@
     <h1 class="text-3xl font-bold text-green-900 mb-6">Profil Saya</h1>
 
     {{-- Kartu Profil --}}
-    <div class="bg-white p-6 rounded-xl shadow border border-green-200 mb-8">
+    <div class="bg-white p-6 rounded-2xl shadow-md border border-green-200 mb-8">
         <div class="flex items-center gap-6">
             <img src="{{ $user->foto_profile ? asset('storage/'.$user->foto_profile) : asset('images/default-avatar.png') }}"
                  class="w-24 h-24 rounded-full object-cover border-2 border-green-700">
@@ -33,31 +33,72 @@
     @if($posts->count() > 0)
         <div class="space-y-6">
             @foreach ($posts as $post)
-                <div class="bg-white p-5 rounded-xl shadow border border-green-200">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-green-200 relative">
 
                     {{-- Header --}}
                     <div class="flex justify-between items-center mb-3">
                         <p class="text-green-600 text-sm">
                             Dipost pada: {{ $post->tanggal_post->format('d M Y · H:i') }}
                         </p>
+
+                        {{-- ✅ TITIK 3 MENU --}}
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                    class="text-xl px-2 hover:text-green-900">
+                                ⋮
+                            </button>
+
+                            <div x-show="open"
+                                 @click.away="open = false"
+                                 x-transition
+                                 class="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg overflow-hidden z-20">
+
+                                <form action="{{ route('mahasiswa.posts.destroy', $post->post_id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Yakin ingin menghapus postingan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
+                                         Hapus 
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Isi --}}
-                    <p class="text-green-900 mb-3">{{ $post->isi }}</p>
+                    <p class="text-green-900 mb-3 whitespace-pre-line">
+                        {{ $post->isi }}
+                    </p>
 
-                    {{-- Gambar --}}
+                    {{-- Gambar Ditengah & Responsif --}}
                     @if($post->gambar)
-                        <div class="flex gap-3 overflow-x-auto">
+                        <div class="flex justify-center mt-4">
                             <img src="{{ asset('storage/' . $post->gambar) }}"
-                                 class="w-40 h-40 object-cover rounded border">
+                                 class="max-w-full md:max-w-2xl h-auto rounded-xl border shadow-sm">
                         </div>
                     @endif
 
-                    {{-- Footer --}}
+                    {{-- ✅ Footer: Komentar, Like, Share --}}
                     <div class="flex items-center gap-6 mt-4 text-sm text-green-700">
                         <span>💬 {{ $post->comments->count() }} Komentar</span>
                         <span>👍 {{ $post->likes->count() }} Like</span>
+
+                        {{-- ✅ Tombol Share --}}
+                        <a href="#"
+                           onclick="navigator.share({
+                               title: 'Postingan Mahasiswa',
+                               text: '{{ \Illuminate\Support\Str::limit($post->isi, 50) }}',
+                               url: '{{ url()->current() }}'
+                           })"
+                           class="flex items-center gap-1 hover:text-green-900">
+                            🔗 Share
+                        </a>
                     </div>
+
                 </div>
             @endforeach
         </div>

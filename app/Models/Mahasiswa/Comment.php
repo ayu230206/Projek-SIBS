@@ -18,6 +18,10 @@ class Comment extends Model
         'tanggal_comment',
     ];
 
+    protected $casts = [
+        'tanggal_comment' => 'datetime', // ← tambahkan ini
+    ];
+
     public function user()
     { 
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');

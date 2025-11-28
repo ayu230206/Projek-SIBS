@@ -1,6 +1,6 @@
 <?php
 
-// app/Http/Controllers/Mahasiswa/CommentController.php
+namespace App\Http\Controllers\Mahasiswa; // ← WAJIB!
 
 use App\Http\Controllers\Controller;
 use App\Models\Mahasiswa\Comment;
@@ -28,13 +28,12 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($comment_id);
 
-        // Otorisasi: Hanya pemilik komentar atau admin yang boleh menghapus
         if ($comment->user_id !== Auth::id()) {
             abort(403, 'Akses ditolak.');
         }
 
         $comment->delete();
-        
+
         return back()->with('success', 'Komentar berhasil dihapus.');
     }
 }
