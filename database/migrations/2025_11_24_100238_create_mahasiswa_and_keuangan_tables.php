@@ -36,6 +36,13 @@ return new class extends Migration
             $table->decimal('jumlah_buku', 15, 2)->default(0.00);
             $table->enum('status_pencairan', ['proses', 'ditransfer', 'diterima', 'ditangguhkan'])->default('proses');
             $table->text('keterangan')->nullable();
+            
+            // Kolom baru untuk Bukti Transfer
+            $table->string('path_bukti_transfer')->nullable(); 
+            
+            // Kolom baru untuk Alasan Ditangguhkan
+            $table->text('alasan_ditangguhkan')->nullable(); 
+            
             $table->timestamps();
         });
     }
