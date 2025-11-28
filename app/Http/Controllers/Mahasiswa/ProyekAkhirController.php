@@ -12,13 +12,13 @@ class ProyekAkhirController extends Controller
     // METHOD BARU: Untuk menampilkan menu utama/dashboard ringkasan
     public function menu() {
         // PERBAIKAN: Mengganti view 'menu' menjadi 'dashboard'
-        return view('admin.mahasiswa.proyek.dashboard'); 
+        return view('mahasiswa.proyek.dashboard');
     }
-    
+
     // Tampilkan semua proyek user saat ini (INDEX - Tabel Riwayat)
     public function index() {
         $projects = ProyekAkhir::where('user_id', Auth::id())->get();
-        return view('admin.mahasiswa.proyek.index', compact('projects'));
+        return view('mahasiswa.proyek.index', compact('projects'));
     }
 
     public function store(Request $request) {
@@ -50,7 +50,7 @@ class ProyekAkhirController extends Controller
     public function edit($id) {
         $proj = ProyekAkhir::findOrFail($id);
         if ($proj->user_id != Auth::id()) return back()->with('error', 'Akses ditolak.');
-        return view('admin.mahasiswa.proyek.edit', compact('proj'));
+        return view('mahasiswa.proyek.edit', compact('proj'));
     }
 
     public function update(Request $request, $id) {

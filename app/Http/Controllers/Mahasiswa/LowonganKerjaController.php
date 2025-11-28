@@ -11,13 +11,13 @@ class LowonganKerjaController extends Controller
     public function index()
     {
         $lowongans = LowonganKerja::orderBy('tanggal_post', 'desc')->get();
-        return view('admin.mahasiswa.lowongankerja.index', compact('lowongans'));
+        return view('mahasiswa.lowongankerja.index', compact('lowongans'));
     }
 
     // Menampilkan detail lowongan + form lamaran
     public function show($id)
     {
         $job = LowonganKerja::findOrFail($id);
-        return view('admin.mahasiswa.lowongankerja.show', compact('job'));
+        return view('mahasiswa.lowongankerja.show', compact('job'));
     }
 }

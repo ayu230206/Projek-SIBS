@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $posts = Post::with('user', 'comments', 'likes')
                      ->orderBy('tanggal_post', 'desc')
                      ->get();
-        return view('admin.mahasiswa.dashboard', [
+        return view('mahasiswa.dashboard', [
             'user' => $user
         ]);
     }

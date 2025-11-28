@@ -18,7 +18,7 @@ class MahasiswaProfileController extends Controller
             ->orderBy('tanggal_post', 'desc')
             ->get();
 
-        return view('admin.mahasiswa.profil.index', [
+        return view('mahasiswa.profil.index', [
             'user' => $user,
             'posts' => $posts,
         ]);
@@ -26,8 +26,8 @@ class MahasiswaProfileController extends Controller
 
     public function edit()
     {
-        $user = Auth::user(); 
-        return view('admin.mahasiswa.profil.edit', compact('user'));
+        $user = Auth::user();
+        return view('mahasiswa.profil.edit', compact('user'));
     }
 
     public function update(Request $request)

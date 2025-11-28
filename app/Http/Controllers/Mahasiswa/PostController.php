@@ -19,13 +19,13 @@ class PostController extends Controller
             ->orderBy('tanggal_post', 'desc')
             ->get();
 
-        return view('admin.mahasiswa.posts.index', compact('posts'));
+        return view('mahasiswa.posts.index', compact('posts'));
     }
 
     // --- 2. CREATE (Menampilkan formulir buat post) ---
     public function create()
     {
-        return view('admin.mahasiswa.posts.create');
+        return view('mahasiswa.posts.create');
     }
 
     // --- 3. STORE (Menyimpan post baru) ---
@@ -39,7 +39,7 @@ class PostController extends Controller
         $post = new Post([
             'isi' => $request->isi,
             // Pastikan menggunakan $user->id (PK standar)
-            'user_id' => Auth::id() 
+            'user_id' => Auth::id()
         ]);
 
         if ($request->hasFile('gambar')) {
@@ -55,7 +55,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with('user', 'comments', 'likes')->findOrFail($id);
-        return view('admin.mahasiswa.posts.show', compact('post'));
+        return view('mahasiswa.posts.show', compact('post'));
     }
 
     // --- 5. EDIT (Menampilkan formulir edit) ---
@@ -68,7 +68,7 @@ class PostController extends Controller
             return redirect()->route('mahasiswa.posts.index')->with('error', 'Tidak punya akses');
         }
 
-        return view('admin.mahasiswa.posts.edit', compact('post'));
+        return view('mahasiswa.posts.edit', compact('post'));
     }
 
     // --- 6. UPDATE (Memperbarui post) ---
@@ -126,7 +126,7 @@ class PostController extends Controller
     public function like($post_id)
     {
         $user_id = Auth::id();
-        
+
         $like = Like::where('post_id', $post_id)
                     ->where('user_id', $user_id)
                     ->first();
@@ -151,7 +151,7 @@ class PostController extends Controller
         $request->validate([
             'platform' => 'nullable|string|max:50',
         ]);
-        
+
         Share::create([
             'post_id' => $post_id,
             'user_id' => Auth::id(),

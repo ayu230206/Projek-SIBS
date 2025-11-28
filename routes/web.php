@@ -83,14 +83,14 @@ Route::middleware(['auth'])->group(function () {
         // ========================
         Route::prefix('magang')->name('magang.')->group(function () {
             Route::get('/dashboard', function () {
-                return view('admin.mahasiswa.magang.dashboard');
+                return view('mahasiswa.magang.dashboard');
             })->name('dashboard');
 
             Route::get('/riwayat', [MagangController::class, 'index'])->name('riwayat');
             Route::get('/', [MagangController::class, 'index'])->name('index');
 
             Route::get('/ajukan', function () {
-                return view('admin.mahasiswa.magang.ajukan');
+                return view('mahasiswa.magang.ajukan');
             })->name('ajukan');
 
             Route::post('/store', [MagangController::class, 'store'])->name('store');
@@ -99,10 +99,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/lowongan', [LowonganMagangController::class, 'index'])->name('lowongan');
             Route::get('/lowongan/{id}', [LowonganMagangController::class, 'show'])->name('lowongan.show');
         });
-
-        // ========================
-        // LOWONGAN KERJA
-        // ========================
+        //lowongan kerja
         Route::prefix('lowongankerja')->name('lowongankerja.')->group(function () {
             Route::get('/', [LowonganKerjaController::class, 'index'])->name('index');
             Route::get('/{id}', [LowonganKerjaController::class, 'show'])->name('show');
