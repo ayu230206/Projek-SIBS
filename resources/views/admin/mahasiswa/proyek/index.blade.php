@@ -16,7 +16,7 @@
     {{-- Tombol Kembali ke Menu Proyek Akhir --}}
 
     <div class="mb-6">
-        <a href="{{ route('mahasiswa.proyek.dashboard') }}"
+        <a href="{{ route('mahasiswa.proyek.index') }}"
             class="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-xl shadow border border-green-300 text-green-900 font-semibold hover:bg-green-100 hover:shadow-md transition">
 
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

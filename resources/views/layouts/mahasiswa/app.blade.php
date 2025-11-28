@@ -22,14 +22,14 @@
         {{-- ✅ SIDEBAR --}}
         @include('layouts.mahasiswa.sidebar')
 
-        {{-- ✅ KONTEN UTAMA --}}
-        <main class="flex-1 p-6 md:p-10">
+        {{-- ✅ KONTEN UTAMA (sudah diperbaiki) --}}
+        <main class="flex-1 p-6 md:p-10 pb-24">
             @yield('content')
         </main>
 
     </div>
 
-    {{-- ✅ FOOTER (SELALU DI BAWAH) --}}
+    {{-- ✅ FOOTER --}}
     @include('layouts.mahasiswa.footer')
 
 

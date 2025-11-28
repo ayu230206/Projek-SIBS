@@ -53,28 +53,46 @@ Route::middleware(['auth'])->group(function () {
         Route::get('profil', [MahasiswaProfileController::class, 'index'])->name('profil.index');
         Route::get('profil/edit', [MahasiswaProfileController::class, 'edit'])->name('profil.edit');
         Route::put('profil', [MahasiswaProfileController::class, 'update'])->name('profil.update');
-        Route::delete('/mahasiswa/posts/{post}', [PostController::class, 'destroy'])->name('mahasiswa.posts.destroy');
 
-        // PROYEK AKHIR
+        // FIX: route hapus yg sebelumnya salah
+        Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+        // ============================
+        // PROYEK AKHIR (FINAL FIXED)
+        // ============================
         Route::prefix('proyek')->name('proyek.')->group(function () {
+
             Route::get('/dashboard', [ProyekAkhirController::class, 'menu'])->name('dashboard');
+
             Route::get('/', [ProyekAkhirController::class, 'index'])->name('index');
-            Route::post('/store', [ProyekAkhirController::class, 'store'])->name('store');
+
+            // FIX: konsisten -> POST /mahasiswa/proyek
+            Route::post('/', [ProyekAkhirController::class, 'store'])->name('store');
+
             Route::get('/{id}/edit', [ProyekAkhirController::class, 'edit'])->name('edit');
+
+            // FIX: konsisten -> PUT /mahasiswa/proyek/{id}
             Route::put('/{id}', [ProyekAkhirController::class, 'update'])->name('update');
+
+            // FIX: konsisten -> DELETE /mahasiswa/proyek/{id}
             Route::delete('/{id}', [ProyekAkhirController::class, 'destroy'])->name('destroy');
         });
 
+        // ========================
         // MAGANG
+        // ========================
         Route::prefix('magang')->name('magang.')->group(function () {
             Route::get('/dashboard', function () {
                 return view('admin.mahasiswa.magang.dashboard');
             })->name('dashboard');
+
             Route::get('/riwayat', [MagangController::class, 'index'])->name('riwayat');
             Route::get('/', [MagangController::class, 'index'])->name('index');
+
             Route::get('/ajukan', function () {
                 return view('admin.mahasiswa.magang.ajukan');
             })->name('ajukan');
+
             Route::post('/store', [MagangController::class, 'store'])->name('store');
 
             // Lowongan Magang
@@ -82,12 +100,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/lowongan/{id}', [LowonganMagangController::class, 'show'])->name('lowongan.show');
         });
 
+        // ========================
         // LOWONGAN KERJA
+        // ========================
         Route::prefix('lowongankerja')->name('lowongankerja.')->group(function () {
-            Route::get('/', [LowonganKerjaController::class, 'index'])->name('index'); // daftar lowongan
-            Route::get('/{id}', [LowonganKerjaController::class, 'show'])->name('show'); // detail lowongan
-
-            // Lamaran kerja
+            Route::get('/', [LowonganKerjaController::class, 'index'])->name('index');
+            Route::get('/{id}', [LowonganKerjaController::class, 'show'])->name('show');
             Route::post('/{id}/lamar', [LowonganKerjaController::class, 'lamar'])->name('lamaran.store');
         });
 
