@@ -1,4 +1,4 @@
-@extends('layouts.mahasiswa.app')
+@extends('mahasiswa.layouts.app')
 @section('title', 'Edit Proyek Akhir')
 
 @section('content')

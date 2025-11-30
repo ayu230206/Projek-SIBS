@@ -12,6 +12,7 @@ use App\Http\Controllers\Mahasiswa\MagangController;
 use App\Http\Controllers\Mahasiswa\LikeController;
 use App\Http\Controllers\Mahasiswa\LowonganKerjaController;
 use App\Http\Controllers\Mahasiswa\LowonganMagangController;
+use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController;
 
 
 //bpdpks
@@ -129,6 +130,26 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{id}/lamar', [LowonganKerjaController::class, 'lamar'])->name('lamaran.store');
         });
 
+        // AKADEMIK MAHASISWA
+        // AKADEMIK MAHASISWA
+        Route::prefix('akademik')->name('akademik.')->group(function () {
+
+            // Dashboard Akademik Mahasiswa
+            Route::get('/dashboard', [MahasiswaAkademikController::class, 'dashboard'])
+                ->name('dashboard');
+
+            // Halaman Upload Dokumen
+            Route::get('/upload', [MahasiswaAkademikController::class, 'uploadPage'])
+                ->name('upload.page');
+
+            // Proses Upload Dokumen
+            Route::post('/upload', [MahasiswaAkademikController::class, 'uploadDokumen'])
+                ->name('upload');
+
+            // Hapus Dokumen Mahasiswa
+            Route::delete('/dokumen/{dokumen}', [MahasiswaAkademikController::class, 'destroyDokumen'])
+                ->name('dokumen.destroy');
+        });
     }); // END: Grup Prefix Mahasiswa
 
     // ============================================
@@ -143,7 +164,7 @@ Route::middleware(['auth'])->group(function () {
         })->name('dashboard');
 
 
-   
+
         Route::resource('keuangan', InfoKeuanganController::class)->except(['show']);
 
         // Tambahkan Route Approval Magang/Kampus di sini jika ada

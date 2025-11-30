@@ -33,7 +33,7 @@ class PostController extends Controller
     {
         $request->validate([
             'isi' => 'required',
-            'gambar' => 'nullable|image|max:2048'
+            'gambar' => 'nullable|image|max:10240'
         ]);
 
         $post = new Post([

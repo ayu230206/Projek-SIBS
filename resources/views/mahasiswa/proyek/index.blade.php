@@ -1,4 +1,4 @@
-@extends('layouts.mahasiswa.app')
+@extends('mahasiswa.layouts.app')
 @section('title', 'Proyek Akhir')
 
 @section('content')
@@ -69,12 +69,13 @@
 
                 <div class="mb-4">
                     <label class="font-semibold">Status Proyek</label>
-                    <select name="status_proyek" class="w-full rounded-lg border border-green-400 focus:ring-green-600 p-2 mt-1">
-                        <option value="pending" {{ old('status_proyek') == 'pending' ? 'selected' : '' }}>Draft</option>
-                        <option value="on_progress" {{ old('status_proyek') == 'on_progress' ? 'selected' : '' }}>Sedang Berjalan</option>
-                        <option value="completed" {{ old('status_proyek') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                    <select name="status_proyek" class="w-full rounded-lg border p-2 mt-1">
+                        <option value="pending">Draft</option>
+                        <option value="on_progress">Sedang Berjalan</option>
+                        <option value="completed">Selesai</option>
                     </select>
                 </div>
+
 
                 <div class="mb-4">
                     <label class="font-semibold">Tahun</label>

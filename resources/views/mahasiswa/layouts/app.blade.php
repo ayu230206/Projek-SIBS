@@ -8,19 +8,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
 
-    @include('layouts.mahasiswa.css')
+    @include('mahasiswa.layouts.css')
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
     {{-- ✅ HEADER --}}
-    @include('layouts.mahasiswa.header')
+    @include('mahasiswa.layouts.header')
 
     {{-- ✅ WRAPPER SIDEBAR + KONTEN --}}
     <div class="flex flex-1">
 
         {{-- ✅ SIDEBAR --}}
-        @include('layouts.mahasiswa.sidebar')
+        @include('mahasiswa.layouts.sidebar')
 
         {{-- ✅ KONTEN UTAMA (sudah diperbaiki) --}}
         <main class="flex-1 p-6 md:p-10 pb-24">
@@ -30,7 +30,7 @@
     </div>
 
     {{-- ✅ FOOTER --}}
-    @include('layouts.mahasiswa.footer')
+    @include('mahasiswa.layouts.footer')
 
 
     {{-- ✅ SCRIPT COPY LINK SHARE (WA, DLL) --}}

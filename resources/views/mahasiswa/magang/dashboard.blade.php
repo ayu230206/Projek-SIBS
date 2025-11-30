@@ -1,9 +1,10 @@
-@extends('layouts.mahasiswa.app')
+@extends('mahasiswa.layouts.app')
 @section('title', 'Dashboard Magang')
 
 @section('content')
 
 <div class="bg-gradient-to-br from-green-50 to-green-100 min-h-screen py-10 px-4">
+    
 
     <div class="max-w-3xl mx-auto">
 
