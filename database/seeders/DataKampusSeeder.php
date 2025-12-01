@@ -9,16 +9,23 @@ class DataKampusSeeder extends Seeder
 {
     public function run(): void
     {
-        // MATIKAN FOREIGN KEY
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // MATIKAN FK HANYA JIKA BUKAN SQLITE
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } else {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        }
 
-        // Kosongkan tabel (pakai delete, bukan truncate)
+        // kosongkan tabel
         DB::table('kampus')->delete();
 
-        // HIDUPKAN KEMBALI
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // HIDUPKAN FK
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } else {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
 
-        // Insert data baru
         DB::table('kampus')->insert([
             [
                 'nama_kampus' => 'Institut Teknologi Sawit Indonesia (ITSI)',

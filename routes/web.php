@@ -27,8 +27,11 @@ use App\Http\Controllers\Bpdpks\AdminNoteController;
 use App\Http\Controllers\Bpdpks\FeedbackController;
 // BPDPKS Middleware
 use App\Http\Middleware\IsBpdpks; // <-- Pastikan ini sudah Anda buat!
-
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
+use App\Http\Controllers\Bpdpks\LowonganController; // <-- TAMBAHKAN INI
+
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -166,6 +169,16 @@ Route::middleware(['auth'])->group(function () {
 
 
         Route::resource('keuangan', InfoKeuanganController::class)->except(['show']);
+        Route::resource('kerjasama', KampusKerjasamaController::class)->except(['show']); // <-- TAMBAHKAN INI
+
+
+        Route::resource('lowongan', LowonganController::class);
+
+    // Rute Monitoring Aplikasi
+    Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
+    Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
+
+    // ...
 
         // Tambahkan Route Approval Magang/Kampus di sini jika ada
         // Route::get('/internship-approval', [InternshipApprovalController::class, 'index'])->name('internship.approval');

@@ -15,16 +15,16 @@
         <i class="fas fa-wallet"></i> Informasi Keuangan
     </a>
 </li>
-        <li class="sidebar-menu-item">
-            <a href="#kampus" class="sidebar-menu-link">
-                <i class="fas fa-university"></i> Kampus & Kerjasama
-            </a>
-        </li>
-        <li class="sidebar-menu-item">
-            <a href="#lowongan" class="sidebar-menu-link">
-                <i class="fas fa-bullhorn"></i> Lowongan Kerja (CRUD)
-            </a>
-        </li>
+<li class="sidebar-menu-item">
+ <a href="{{ route('bpdpks.kerjasama.index') }}" class="sidebar-menu-link">
+ <i class="fas fa-university"></i> Kampus & Kerjasama
+ </a>
+</li>
+<li class="sidebar-menu-item">
+    <a href="{{ route('bpdpks.lowongan.index') }}" class="sidebar-menu-link">
+        <i class="fas fa-bullhorn"></i> Lowongan Kerja (CRUD)
+    </a>
+</li>
         <li class="sidebar-menu-item">
             <a href="#data-mahasiswa" class="sidebar-menu-link">
                 <i class="fas fa-user-graduate"></i> Data Mahasiswa (OLAP)
