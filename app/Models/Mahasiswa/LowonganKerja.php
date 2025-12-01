@@ -21,6 +21,7 @@ class LowonganKerja extends Model
         'perusahaan',
         'deskripsi',
         'lokasi',
+        'gaji',
         'tanggal_post',
         'status',
     ];

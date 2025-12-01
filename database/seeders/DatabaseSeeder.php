@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\Bpdpks\KeuanganSeeder;
- // Import KeuanganSeeder Anda dari namespace Bpdpks
-use App\Models\User; // Digunakan untuk membuat user BPDPKS admin
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -15,32 +14,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Panggil seeder Awal yang Anda butuhkan (DataKampusSeeder dan UserRoleSeeder)
+        // Seeder awal
         $this->call([
-            DataKampusSeeder::class, // Asumsi ini mengisi data awal statis kampus
-            UserRoleSeeder::class,   // Asumsi ini mengisi role user
+            DataKampusSeeder::class,
+            UserRoleSeeder::class,
         ]);
         
-        // Panggil seeder Data Fiktif dengan urutan yang logis:
+        // Seeder data fiktif
         $this->call([
-            // 1. KampusSeeder harus dipanggil (mengisi data Kampus fiktif)
             KampusSeeder::class,
-            
-            // 2. MahasiswaSeeder (membuat user 'mahasiswa' dan detailnya)
             MahasiswaSeeder::class,
-            
-            // 3. KeuanganSeeder (mengisi data keuangan mahasiswa yang baru dibuat)
-            
+            // KeuanganSeeder bisa ditambahkan jika dibutuhkan
+            LowonganMagangSeeder::class,
         ]);
         
-        // Tambahkan user Admin/BPDPKS utama untuk login
-        User::create([
-            'nama_lengkap' => 'BPDPKS User',
-            'email' => 'bpdpks@admin.com',
-            'password' => Hash::make('password'), // password: password
-            'role' => 'bpdpks',
-            'status_aktif' => true,
-        ]);
+        // User Admin BPDPKS aman dari duplikasi
+        User::firstOrCreate(
+            ['email' => 'bpdpks@admin.com'], // cek email dulu
+            [
+                'nama_lengkap' => 'BPDPKS User',
+                'password' => Hash::make('password'),
+                'role' => 'bpdpks',
+                'status_aktif' => true,
+            ]
+        );
         
         $this->command->info('Database berhasil di-seed dengan data lengkap.');
     }

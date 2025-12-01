@@ -14,23 +14,9 @@
         </div>
 
         <!-- Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <!-- Welcome Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-800 ml-4">Selamat Datang</h2>
-                </div>
-                <p class="text-gray-600">Selamat datang di Dashboard Mahasiswa. Area ini siap untuk diisi dengan konten dan fitur baru Anda.</p>
-            </div>
-
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- IPK Terakhir Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 min-h-[280px] flex flex-col justify-between">
                 <div class="flex items-center mb-4">
                     <div class="bg-blue-100 p-3 rounded-full">
                         <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,37 +29,28 @@
                 <div class="text-3xl font-bold text-blue-600">-</div>
             </div>
 
-            <!-- Status Pengajuan Magang Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <!-- Status Pengajuan Magang (Hanya 1) -->
+            <a href="{{ route('mahasiswa.magang.index') }}"
+                class="block bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 min-h-[280px] flex flex-col justify-between">
+
                 <div class="flex items-center mb-4">
                     <div class="bg-purple-100 p-3 rounded-full">
                         <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8">
+                            </path>
                         </svg>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-800 ml-4">Status Pengajuan Magang</h2>
                 </div>
-                <p class="text-gray-600 mb-4">Lihat status pengajuan magang Anda.</p>
-                <div class="flex items-center">
-                    <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">-</span>
-                </div>
-            </div>
 
-            <!-- Penelitian Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                <div class="flex items-center mb-4">
-                    <div class="bg-indigo-100 p-3 rounded-full">
-                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-800 ml-4">Penelitian</h2>
-                </div>
-                <p class="text-gray-600 mb-4">Belum Ada Informasi penelitian Anda.</p>
-            </div>
+                <p class="text-gray-600 mb-4">Lihat status pengajuan magang Anda.</p>
+
+    
+            </a>
 
             <!-- Lomba Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 min-h-[280px] flex flex-col justify-between">
                 <div class="flex items-center mb-4">
                     <div class="bg-orange-100 p-3 rounded-full">
                         <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,8 +62,8 @@
                 <p class="text-gray-600 mb-4">Belum Ada informasi Lomba</p>
             </div>
 
-            <!-- Info Kolaborasi Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+            <!-- Info Kolaborasi -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 min-h-[280px] flex flex-col justify-between">
                 <div class="flex items-center mb-4">
                     <div class="bg-teal-100 p-3 rounded-full">
                         <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +73,6 @@
                     <h2 class="text-2xl font-bold text-gray-800 ml-4">Info Kolaborasi</h2>
                 </div>
                 <p class="text-gray-600 mb-4">-</p>
-            
             </div>
 
         </div>

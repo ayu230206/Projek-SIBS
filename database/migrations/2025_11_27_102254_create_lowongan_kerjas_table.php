@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('perusahaan');
             $table->text('deskripsi');
             $table->string('lokasi')->nullable();
+            $table->string('gaji')->nullable(); // <- kolom gaji ditambahkan
             $table->date('tanggal_post');
             $table->enum('status', ['buka', 'tutup'])->default('buka');
             $table->timestamps();

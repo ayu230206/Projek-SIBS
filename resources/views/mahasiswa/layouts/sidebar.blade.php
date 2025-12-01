@@ -1,4 +1,4 @@
-<aside 
+<aside
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     class="fixed md:static z-40 md:translate-x-0 w-64 bg-gradient-to-b from-green-800 to-green-900 text-green-100 min-h-screen p-6 shadow-2xl transition-all duration-300 ease-in-out">
 
@@ -54,12 +54,37 @@
             <span class="font-medium">Lowongan Kerja</span>
         </a>
 
-        <a href="#" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
-            <svg class="w-6 h-6 mr-3 group-hover:text-green-200 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+        <a href="{{ route('mahasiswa.notifikasi') }}" class="relative flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg transition-all">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 17h5l-1.405-1.405
+            A2.032 2.032 0 0118 14.158V11
+            a6.002 6.002 0 00-4-5.659V5
+            a2 2 0 10-4 0v.341
+            C7.67 6.165 6 8.388 6 11v3.159
+            c0 .538-.214 1.055-.595 1.436
+            L4 17h5m6 0v1
+            a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
+
             <span class="font-medium">Notifikasi</span>
+
+            @if(auth()->user()->unreadNotifications->count() > 0)
+            <span style="
+            position:absolute;
+            top:6px;
+            right:10px;
+            background:red;
+            color:white;
+            font-size:12px;
+            font-weight:bold;
+            padding:2px 6px;
+            border-radius:999px;">
+                {{ auth()->user()->unreadNotifications->count() }}
+            </span>
+            @endif
         </a>
+
 
     </nav>
 </aside>

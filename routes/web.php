@@ -13,6 +13,7 @@ use App\Http\Controllers\Mahasiswa\LikeController;
 use App\Http\Controllers\Mahasiswa\LowonganKerjaController;
 use App\Http\Controllers\Mahasiswa\LowonganMagangController;
 use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController;
+use App\Http\Controllers\Mahasiswa\NotifikasiController;
 
 
 //bpdpks
@@ -131,8 +132,10 @@ Route::middleware(['auth'])->group(function () {
         // ========================
         Route::prefix('lowongankerja')->name('lowongankerja.')->group(function () {
             Route::get('/', [LowonganKerjaController::class, 'index'])->name('index');
+            Route::get('/riwayat', [LowonganKerjaController::class, 'riwayat'])->name('riwayat');
             Route::get('/{id}', [LowonganKerjaController::class, 'show'])->name('show');
             Route::post('/{id}/lamar', [LowonganKerjaController::class, 'lamar'])->name('lamaran.store');
+            
         });
 
         // AKADEMIK MAHASISWA
@@ -155,6 +158,11 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/dokumen/{dokumen}', [MahasiswaAkademikController::class, 'destroyDokumen'])
                 ->name('dokumen.destroy');
         });
+        //notifikasi 
+        Route::get('notifikasi', [NotifikasiController::class, 'index'])
+         ->name('notifikasi');
+        
+
     }); // END: Grup Prefix Mahasiswa
 
     // ============================================

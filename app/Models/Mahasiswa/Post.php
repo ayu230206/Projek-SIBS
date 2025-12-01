@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Mahasiswa\Comment;
 use App\Models\Mahasiswa\Like;
 use App\Models\Mahasiswa\Share;
+use App\Models\User;
 
 class Post extends Model
 {

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Mahasiswa\Magang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification; // ✅ WAJIB
+use App\Notifications\NotifUmum; // ✅ WAJIB
 
 class MagangController extends Controller
 {
@@ -33,7 +35,15 @@ class MagangController extends Controller
         $data['status_pengajuan'] = 'pending';
         $data['tanggal_pengajuan'] = now();
 
-        Magang::create($data);
+        $magang = Magang::create($data);
+
+        // ✅ ✅ ✅ NOTIFIKASI TANPA notify()
+        $user = Auth::user();
+        Notification::send($user, new NotifUmum(
+            'Pengajuan Magang',
+            'Pengajuan magang kamu berhasil dikirim',
+            url('/notifikasi')
+        ));
 
         return back()->with('success', 'Pengajuan magang berhasil');
     }
@@ -65,6 +75,14 @@ class MagangController extends Controller
 
         $magang->update($data);
 
+        // ✅ ✅ ✅ NOTIFIKASI TANPA notify()
+        $user = Auth::user();
+        Notification::send($user, new NotifUmum(
+            'Update Pengajuan Magang',
+            'Data pengajuan magang kamu diperbarui',
+            url('/notifikasi')
+        ));
+
         return back()->with('success', 'Magang diperbarui');
     }
 
@@ -77,6 +95,14 @@ class MagangController extends Controller
         }
 
         $magang->delete();
+
+        // ✅ ✅ ✅ NOTIFIKASI TANPA notify()
+        $user = Auth::user();
+        Notification::send($user, new NotifUmum(
+            'Pengajuan Magang Dihapus',
+            'Pengajuan magang kamu dihapus',
+            url('/notifikasi')
+        ));
 
         return back()->with('success', 'Magang dihapus');
     }
