@@ -28,8 +28,10 @@ use App\Http\Controllers\Bpdpks\FeedbackController;
 // BPDPKS Middleware
 use App\Http\Middleware\IsBpdpks; // <-- Pastikan ini sudah Anda buat!
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Bpdpks\DataMahasiswaController;
 use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
 use App\Http\Controllers\Bpdpks\LowonganController; // <-- TAMBAHKAN INI
+
 
 
 
@@ -177,7 +179,7 @@ Route::middleware(['auth'])->group(function () {
     // Rute Monitoring Aplikasi
     Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
     Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
-
+Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
     // ...
 
         // Tambahkan Route Approval Magang/Kampus di sini jika ada

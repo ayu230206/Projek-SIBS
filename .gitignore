@@ -23,3 +23,10 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 mysql-8.4/
+*.ibd
+*.pid
+*.err
+*.ibt
+*.index
+
+

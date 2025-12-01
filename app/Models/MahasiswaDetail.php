@@ -28,6 +28,23 @@ class MahasiswaDetail extends Model
     public function kampus()
     {
         // Foreign key di tabel ini adalah 'kampus_id'
-        return $this->belongsTo(Kampus::class, 'kampus_id', 'id');
+        // Karena Kampus berada di namespace App\Models\Bpdpks, kita harus impor atau menggunakan fully qualified name.
+        // Asumsi Kampus berada di App\Models\Bpdpks\Kampus (sesuai rencana awal)
+        return $this->belongsTo(\App\Models\Bpdpks\Kampus::class, 'kampus_id', 'id');
+    }
+    
+    /**
+     * Accessor untuk mendapatkan badge status IPK.
+     * Gunakan warna yang sudah didefinisikan di CSS: primary, secondary, danger.
+     */
+    public function getIpkBadgeAttribute(): string
+    {
+        if ($this->ipk >= 3.80) {
+            return '<span class="badge bg-primary">Excellent</span>';
+        } elseif ($this->ipk >= 3.50) {
+            return '<span class="badge bg-secondary">Good</span>';
+        } else {
+            return '<span class="badge bg-danger">Needs Attention</span>';
+        }
     }
 }

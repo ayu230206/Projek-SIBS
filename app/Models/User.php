@@ -10,6 +10,7 @@ use App\Models\Kampus;
 use App\Models\Bpdpks\Keuangan; // Keuangan berada di namespace Bpdpks
 use App\Models\MahasiswaDetail; 
 
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -60,4 +61,10 @@ class User extends Authenticatable
     public function kampus(){
         return $this->belongsTo(Kampus::class, 'asal_kampus', 'id');
     }
+
+    public function detailMahasiswa()
+{
+    // Relasi one-to-one ke detail mahasiswa
+    return $this->hasOne(MahasiswaDetail::class, 'user_id');
+}
 }

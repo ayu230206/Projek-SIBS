@@ -4,7 +4,7 @@ namespace App\Models\Bpdpks;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\MahasiswaDetail;
 class Kampus extends Model
 {
     use HasFactory;
@@ -50,4 +50,10 @@ class Kampus extends Model
                 return '<span class="badge bg-secondary">Tidak Diketahui</span>';
         }
     }
+
+public function mahasiswaDetails()
+{
+    // Relasi one-to-many ke detail mahasiswa
+    return $this->hasMany(MahasiswaDetail::class, 'kampus_id');
+}
 }

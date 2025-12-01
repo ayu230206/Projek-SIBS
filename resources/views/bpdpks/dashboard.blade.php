@@ -7,7 +7,7 @@
     <div class="header" id="overview">
         <div>
             <div class="welcome">Welcome back, <span
-                style="color:var(--primary)">{{ Session::get('username') ?? 'bpdpks' }}</span></div>
+                    style="color:var(--primary)">{{ Session::get('username') ?? 'bpdpks' }}</span></div>
             <div class="subtle">Dashboard overview & quick actions</div>
         </div>
         <div class="controls">
@@ -23,7 +23,8 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <div style="font-size:0.88rem; color:#6b776f;">Total Recipients</div>
-                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)">7.000</div>
+                        {{-- Angka sudah dikoreksi menjadi 7000 --}}
+                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)">7000</div>
                     </div>
                     <div style="text-align:right">
                         <div style="font-size:0.8rem; color:#7b8a82">This year</div>
@@ -70,6 +71,14 @@
     <section id="data-mahasiswa" class="row g-4 mb-4">
         <div class="col-lg-12">
             <h2 class="section-title"><i class="fas fa-chart-line me-2"></i> Data Mahasiswa (OLAP) - Rata-rata IP per Kampus</h2>
+            
+            {{-- MODIFIKASI: Menambahkan tautan navigasi ke halaman Data Mahasiswa Penerima --}}
+            <p class="subtle mt-2 mb-4">
+                Analisis visual data IPK. Untuk melihat **daftar lengkap data diri dan performa akademik mahasiswa**,
+                silakan klik: <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="btn btn-sm btn-outline-primary ms-2">
+                    <i class="fas fa-arrow-right me-1"></i> Data Mahasiswa Penerima
+                </a>
+            </p>
         </div>
         
         {{-- CHART BAR (IPK by Campus) --}}
@@ -94,6 +103,7 @@
                     </div>
                 </div>
                 <div class="chart-box">
+                    {{-- Pastikan elemen <canvas id="barChart"> ada di dalam card --}}
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
@@ -104,6 +114,7 @@
             <div class="card-custom p-3">
                 <div class="section-title">IPK Distribution</div>
                 <div class="chart-box" style="display: flex; justify-content: center;">
+                    {{-- Pastikan elemen <canvas id="donutChart"> ada di dalam card --}}
                     <canvas id="donutChart" style="max-width:240px;"></canvas>
                 </div>
                 <div style="margin-top:10px; font-size:0.95rem; color:#5f6b66;">
@@ -115,37 +126,11 @@
         </div>
     </section>
     
-    <hr>
-
-    <section id="data-mahasiswa-table" class="mb-4">
-        <div class="card-custom p-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="section-title"><i class="fas fa-table me-2"></i> Data Detail Penerima (Filtrasi OLAP)</div>
-                <div style="min-width:240px;">
-                    <input id="tableSearch" class="form-control form-control-sm"
-                        placeholder="Search recipients (name, campus)..." />
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table id="recipientsTable" class="table table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Campus</th>
-                            <th>Class</th>
-                            <th>IPK</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- Data table akan di-load di sini --}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
+    {{-- HAPUS: Bagian ini dihapus karena data detail dipindahkan ke route 'bpdpks.datamahasiswa.index' --}}
+    {{-- <hr> --}}
+    {{-- <section id="data-mahasiswa-table" class="mb-4"> ... </section> --}}
+    {{-- <hr> --}}
+    
     <hr>
     
     <section id="persetujuan" class="mb-4">
@@ -186,18 +171,24 @@
 @endsection
 
 @section('scripts')
-    {{-- Inisialisasi Chart dan DataTables diletakkan di sini --}}
     <script>
+        // FIX: Jangan pakai nama getComputedStyle karena bentrok dengan bawaan browser
+        function getCssVar(el) {
+            return window.getComputedStyle(el);
+        }
+        
+        // Ambil warna dari CSS
+        const primaryColor   = getCssVar(document.documentElement).getPropertyValue('--primary').trim()   || '#0b3a2e';
+        const secondaryColor = getCssVar(document.documentElement).getPropertyValue('--secondary').trim() || '#bfa15a';
+        const dangerColor    = getCssVar(document.documentElement).getPropertyValue('--danger').trim()    || '#e07a5f';
+        
         $(document).ready(function() {
-            // Inisialisasi DataTables
-            $('#recipientsTable').DataTable({
-                // Konfigurasi DataTables di sini
-            });
-            $('#internTable').DataTable({
-                // Konfigurasi DataTables di sini
-            });
+            
+            // HAPUS: Inisialisasi DataTable untuk recipientsTable karena section-nya sudah dihapus
+            // $('#recipientsTable').DataTable({}); 
+            $('#internTable').DataTable({});
 
-            // Inisialisasi Chart Bar (BarChart)
+            // Bar Chart
             const barCtx = document.getElementById('barChart');
             new Chart(barCtx, {
                 type: 'bar',
@@ -205,9 +196,9 @@
                     labels: ['PCR', 'UNRI', 'UNILAK', 'UIN Suska', 'UMRI', 'INSTIPER', 'UNDIP', 'POLBANGTAN', 'IPB', 'ITERA'],
                     datasets: [{
                         label: 'Rata-rata IPK',
-                        data: [3.85, 3.68, 3.72, 3.55, 3.79, 3.81, 3.60, 3.90, 3.75, 3.65], // Data dummy
-                        backgroundColor: 'rgba(11, 58, 46, 0.8)', // var(--primary)
-                        borderColor: 'rgba(11, 58, 46, 1)',
+                        data: [3.85, 3.68, 3.72, 3.55, 3.79, 3.81, 3.60, 3.90, 3.75, 3.65],
+                        backgroundColor: primaryColor,
+                        borderColor: primaryColor,
                         borderWidth: 1
                     }]
                 },
@@ -223,18 +214,18 @@
                 }
             });
 
-            // Inisialisasi Chart Donut (DonutChart)
+            // Donut Chart
             const donutCtx = document.getElementById('donutChart');
             new Chart(donutCtx, {
                 type: 'doughnut',
                 data: {
                     labels: ['Excellent (≥ 3.8)', 'Good (3.5 – 3.79)', 'Needs Attention (< 3.5)'],
                     datasets: [{
-                        data: [40, 50, 10], // Data dummy (40%, 50%, 10%)
+                        data: [40, 50, 10],
                         backgroundColor: [
-                            '#0b3a2e', // Primary
-                            '#bfa15a', // Accent
-                            '#e07a5f'  // Danger
+                            primaryColor,
+                            secondaryColor,
+                            dangerColor
                         ],
                         hoverOffset: 4
                     }]
@@ -243,11 +234,18 @@
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     }
                 }
+            });
+
+            // HAPUS: Search events untuk recipientsTable karena section-nya sudah dihapus
+            // $('#tableSearch').on('keyup', function() {
+            //     $('#recipientsTable').DataTable().search(this.value).draw();
+            // });
+
+            $('#internSearch').on('keyup', function() {
+                $('#internTable').DataTable().search(this.value).draw();
             });
         });
     </script>
