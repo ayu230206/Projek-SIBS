@@ -7,6 +7,7 @@ use App\Models\Mahasiswa\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class CommentController extends Controller
 {
     public function store(Request $request, $post_id)
@@ -36,4 +37,5 @@ class CommentController extends Controller
 
         return back()->with('success', 'Komentar berhasil dihapus.');
     }
+    
 }
