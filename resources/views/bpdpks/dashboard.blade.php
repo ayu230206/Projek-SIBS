@@ -160,133 +160,109 @@
 
 @section('scripts')
     <script>
-        // Data PHP yang di-pass ke JavaScript (Inisialisasi)
-        const initialBarLabels = @json($chartData['barLabels']);
-        const initialBarData = @json($chartData['barData']);
-        const initialDonutData = @json($chartData['donutData']);
-        const initialDonutLabels = @json($chartData['donutLabels']);
-        
-        let barChart;
-        let donutChart;
+    // Data PHP yang di-pass ke JavaScript dengan aman
+    const initialBarLabels = JSON.parse('@json($chartData["barLabels"])');
+    const initialBarData = JSON.parse('@json($chartData["barData"])');
+    const initialDonutData = JSON.parse('@json($chartData["donutData"])');
+    const initialDonutLabels = JSON.parse('@json($chartData["donutLabels"])');
 
-        function getCssVar(el) {
-            return window.getComputedStyle(el);
-        }
-        
-        // Ambil warna dari CSS
-        const primaryColor = getCssVar(document.documentElement).getPropertyValue('--primary').trim()  || '#0b3a2e';
-        const secondaryColor = getCssVar(document.documentElement).getPropertyValue('--secondary').trim() || '#bfa15a';
-        const dangerColor = getCssVar(document.documentElement).getPropertyValue('--danger').trim() || '#e07a5f';
-        
-        // Fungsi untuk menginisialisasi/mengupdate grafik
-        function initializeCharts(barLabels, barData, donutData, donutLabels) {
-             // Bar Chart
-            const barCtx = document.getElementById('barChart');
-            if (barChart) {
-                barChart.destroy(); // Hancurkan chart lama jika ada
+    let barChart;
+    let donutChart;
+
+    function getCssVar(el) {
+        return window.getComputedStyle(el);
+    }
+
+    // Ambil warna dari CSS
+    const primaryColor = getCssVar(document.documentElement).getPropertyValue('--primary').trim() || '#0b3a2e';
+    const secondaryColor = getCssVar(document.documentElement).getPropertyValue('--secondary').trim() || '#bfa15a';
+    const dangerColor = getCssVar(document.documentElement).getPropertyValue('--danger').trim() || '#e07a5f';
+
+    // Fungsi untuk menginisialisasi/mengupdate grafik
+    function initializeCharts(barLabels, barData, donutData, donutLabels) {
+        // Bar Chart
+        const barCtx = document.getElementById('barChart');
+        if (barChart) barChart.destroy();
+        barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'Rata-rata IPK',
+                    data: barData,
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: false, max: 4.0, min: 3.0 }
+                },
+                plugins: { legend: { display: false } }
             }
-            barChart = new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: barLabels, 
-                    datasets: [{
-                        label: 'Rata-rata IPK',
-                        data: barData, 
-                        backgroundColor: primaryColor,
-                        borderColor: primaryColor,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            max: 4.0,
-                            min: 3.0
-                        }
-                    },
-                     plugins: {
-                         legend: { display: false }
-                     }
-                }
-            });
-
-            // Donut Chart
-            const donutCtx = document.getElementById('donutChart');
-             if (donutChart) {
-                donutChart.destroy(); // Hancurkan chart lama jika ada
-            }
-            donutChart = new Chart(donutCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: donutLabels, 
-                    datasets: [{
-                        data: donutData, 
-                        backgroundColor: [
-                            primaryColor,
-                            secondaryColor,
-                            dangerColor
-                        ],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        }
-        
-        // Fungsi AJAX untuk mengambil data baru berdasarkan filter
-        function updateCharts(kampusId) {
-            // Tampilkan loading state jika perlu
-            $('#chartTitle').text('Loading data...');
-
-            $.ajax({
-                url: "{{ route('bpdpks.chartdata.api') }}", // Panggil rute baru
-                method: 'GET',
-                data: { kampus_id: kampusId },
-                success: function(data) {
-                    // Update judul chart
-                    const selectedKampus = $('#filterKampusChart option:selected').text();
-                    $('#chartTitle').text(`Average IPK — ${selectedKampus}`);
-                    
-                    // Update Card
-                    $('#totalRecipients').text(data.totalRecipients);
-                    
-                    // Re-inisialisasi/update grafik
-                    initializeCharts(data.barLabels, data.barData, data.donutData, data.donutLabels);
-                },
-                error: function(xhr) {
-                    console.error('Error fetching chart data:', xhr);
-                    $('#chartTitle').text('Average IPK — Error Loading Data');
-                }
-            });
-        }
-
-        $(document).ready(function() {
-            
-            $('#internTable').DataTable({});
-
-            // 1. Inisialisasi Grafik dengan data dari Controller saat load
-            initializeCharts(initialBarLabels, initialBarData, initialDonutData, initialDonutLabels);
-            
-            // Set Judul Awal
-            $('#chartTitle').text('Average IPK — Semua Kampus');
-
-            // 2. Event Listener untuk filter
-            $('#filterKampusChart').on('change', function() {
-                const selectedId = $(this).val();
-                updateCharts(selectedId);
-            });
-
-            $('#internSearch').on('keyup', function() {
-                $('#internTable').DataTable().search(this.value).draw();
-            });
         });
-    </script>
+
+        // Donut Chart
+        const donutCtx = document.getElementById('donutChart');
+        if (donutChart) donutChart.destroy();
+        donutChart = new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: donutLabels,
+                datasets: [{
+                    data: donutData,
+                    backgroundColor: [primaryColor, secondaryColor, dangerColor],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('#internTable').DataTable();
+
+        // 1. Inisialisasi Grafik saat load
+        initializeCharts(initialBarLabels, initialBarData, initialDonutData, initialDonutLabels);
+
+        // Set Judul Awal
+        $('#chartTitle').text('Average IPK — Semua Kampus');
+
+        // 2. Event Listener untuk filter
+        $('#filterKampusChart').on('change', function() {
+            const selectedId = $(this).val();
+            updateCharts(selectedId);
+        });
+
+        $('#internSearch').on('keyup', function() {
+            $('#internTable').DataTable().search(this.value).draw();
+        });
+    });
+
+    function updateCharts(kampusId) {
+        $('#chartTitle').text('Loading data...');
+        $.ajax({
+            url: "{{ route('bpdpks.chartdata.api') }}",
+            method: 'GET',
+            data: { kampus_id: kampusId },
+            success: function(data) {
+                const selectedKampus = $('#filterKampusChart option:selected').text();
+                $('#chartTitle').text(`Average IPK — ${selectedKampus}`);
+                $('#totalRecipients').text(data.totalRecipients);
+                initializeCharts(data.barLabels, data.barData, data.donutData, data.donutLabels);
+            },
+            error: function(xhr) {
+                console.error('Error fetching chart data:', xhr);
+                $('#chartTitle').text('Average IPK — Error Loading Data');
+            }
+        });
+    }
+</script>
+
 @endsection

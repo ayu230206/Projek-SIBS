@@ -18,7 +18,7 @@ use App\Http\Controllers\Mahasiswa\LowonganKerjaController;
 use App\Http\Controllers\Mahasiswa\LowonganMagangController; // <-- CONTROLLER MAHASISWA
 use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController;
 use App\Http\Controllers\Mahasiswa\NotifikasiController;
-
+use App\Http\Controllers\Mahasiswa\FeedbackController as MahasiswaFeedbackController;
 
 // ============================================
 // BPDPKS Controllers
@@ -29,6 +29,7 @@ use App\Http\Controllers\Bpdpks\DataMahasiswaController;
 use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
 // BPDPKS Middleware
 use App\Http\Middleware\IsBpdpks; // <-- Pastikan ini sudah Anda buat!
+use App\Http\Controllers\Bpdpks\FeedbackController as BpdpksFeedbackController;
 
 
 // ============================================
@@ -142,6 +143,14 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/dokumen/{dokumen}', [MahasiswaAkademikController::class, 'destroyDokumen'])->name('dokumen.destroy');
         });
         
+// ...
+// 💬 FEEDBACK MAHASISWA
+Route::prefix('feedback')->name('feedback.')->group(function () {
+    Route::get('/', [MahasiswaFeedbackController::class, 'index'])->name('index');
+    Route::post('/', [MahasiswaFeedbackController::class, 'store'])->name('store');
+});
+// ...
+
         // Notifikasi
         Route::get('notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi');
 
@@ -171,6 +180,11 @@ Route::middleware(['auth'])->group(function () {
         
         // Data Mahasiswa
         Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
+// ...
+// 💬 MANAJEMEN FEEDBACK BPDPKS
+Route::resource('feedback', BpdpksFeedbackController::class)->only(['index', 'show']);
+// ...
+
 
     }); // END: Grup Prefix BPDPKS
 
