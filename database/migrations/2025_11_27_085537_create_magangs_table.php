@@ -15,9 +15,13 @@ return new class extends Migration {
             $table->text('deskripsi')->nullable();
             $table->date('mulai')->nullable();
             $table->date('selesai')->nullable();
-            $table->enum('status_pengajuan', ['pending', 'approved', 'rejected'])->default('pending');
+
+            // ✅ STATUS BARU
+            $table->enum('status_pengajuan', ['proses', 'diterima', 'ditolak'])
+                  ->default('proses');
+
             $table->date('tanggal_pengajuan')->nullable();
-            $table->string('file_pendukung')->nullable(); // path file pdf/doc
+            $table->string('file_pendukung')->nullable();
             $table->timestamps();
         });
     }
