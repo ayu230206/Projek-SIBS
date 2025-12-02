@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\Bpdpks\KeuanganSeeder;
+use Database\Seeders\AdminSeeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
