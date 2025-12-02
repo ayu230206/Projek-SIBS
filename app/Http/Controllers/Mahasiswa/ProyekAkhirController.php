@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Mahasiswa\ProyekAkhir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Mahasiswa\BankJudulProyek;
+
 
 class ProyekAkhirController extends Controller
 {
@@ -96,5 +98,10 @@ class ProyekAkhirController extends Controller
         $proj->delete();
 
         return back()->with('success', 'Proyek dihapus');
+    }
+    public function bankJudul()
+    {
+        $judul = BankJudulProyek::latest()->get();
+        return view('mahasiswa.proyek.bank-judul-proyek-akhir', compact('judul'));
     }
 }

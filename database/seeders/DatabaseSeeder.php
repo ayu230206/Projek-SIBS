@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             LowonganMagangSeeder::class,
         ]);
         
+        $this->call([
+            BankJudulProyekSeeder::class,
+        ]);
         // User Admin BPDPKS aman dari duplikasi
         User::firstOrCreate(
             ['email' => 'bpdpks@admin.com'], // cek email dulu

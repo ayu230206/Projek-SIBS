@@ -14,6 +14,7 @@ use App\Http\Controllers\Mahasiswa\LowonganKerjaController;
 use App\Http\Controllers\Mahasiswa\LowonganMagangController;
 use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController;
 use App\Http\Controllers\Mahasiswa\NotifikasiController;
+use App\Http\Controllers\Mahasiswa\BankJudulProyekController;
 
 
 //bpdpks
@@ -103,6 +104,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit', [ProyekAkhirController::class, 'edit'])->name('edit');
             Route::put('/{id}', [ProyekAkhirController::class, 'update'])->name('update');
             Route::delete('/{id}', [ProyekAkhirController::class, 'destroy'])->name('destroy');
+            Route::get('/bank-judul-proyek-akhir', [BankJudulProyekController::class, 'index'])
+                ->name('bankjudul');
         });
 
         // ========================
@@ -135,7 +138,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/riwayat', [LowonganKerjaController::class, 'riwayat'])->name('riwayat');
             Route::get('/{id}', [LowonganKerjaController::class, 'show'])->name('show');
             Route::post('/{id}/lamar', [LowonganKerjaController::class, 'lamar'])->name('lamaran.store');
-            
         });
 
         // AKADEMIK MAHASISWA
@@ -159,9 +161,7 @@ Route::middleware(['auth'])->group(function () {
         });
         //notifikasi 
         Route::get('notifikasi', [NotifikasiController::class, 'index'])
-         ->name('notifikasi');
-        
-
+            ->name('notifikasi');
     }); // END: Grup Prefix Mahasiswa
 
     // ============================================
@@ -183,11 +183,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('lowongan', LowonganController::class);
 
-    // Rute Monitoring Aplikasi
-    Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
-    Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
-Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
-    // ...
+        // Rute Monitoring Aplikasi
+        Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
+        Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
+        Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
+        // ...
 
         // Tambahkan Route Approval Magang/Kampus di sini jika ada
         // Route::get('/internship-approval', [InternshipApprovalController::class, 'index'])->name('internship.approval');

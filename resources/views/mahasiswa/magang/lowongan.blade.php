@@ -2,8 +2,9 @@
 @section('title', 'Lowongan Magang')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-6 py-8 bg-gradient-to-br from-green-50 to-white min-h-screen">
-    <h1 class="text-4xl font-extrabold text-green-900 mb-8 text-center tracking-tight">Lowongan Magang</h1>
+<div class="min-h-screen py-8 bg-gradient-to-br from-green-50 to-white">
+
+<h1 class="text-4xl font-extrabold text-green-900 mb-8 text-center tracking-tight">Lowongan Magang</h1>
 
     @forelse ($lowongan as $item)
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-green-100 mb-6 hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out transform">
