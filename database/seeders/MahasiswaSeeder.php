@@ -32,17 +32,19 @@ class MahasiswaSeeder extends Seeder
             $nim = $nimPrefix . str_pad($i, 4, '0', STR_PAD_LEFT);
 
             // 1. Insert ke tabel users (role 'mahasiswa')
-            $userId = DB::table('users')->insertGetId([
-                'nama_lengkap' => $nama,
-                'email' => 'mhs' . $i . '@test.com',
-                'password' => Hash::make('password'),
-                'role' => 'mahasiswa',
-                'asal_kampus' => $kampusId,
-                'angkatan' => '2022',
-                'status_aktif' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+         // 1. Insert ke tabel users (role 'mahasiswa')
+$userId = DB::table('users')->insertGetId([
+    'nama_lengkap' => $nama,
+    'email' => 'mhs' . $i . '@test.com',
+    'username' => 'mhs' . $i, // tambahkan ini
+    'password' => Hash::make('password'),
+    'role' => 'mahasiswa',
+    'asal_kampus' => $kampusId,
+    'angkatan' => '2022',
+    'status_aktif' => true,
+    'created_at' => now(),
+    'updated_at' => now(),
+]);
 
             // 2. Insert ke tabel mahasiswa_detail
             DB::table('mahasiswa_detail')->insert([
