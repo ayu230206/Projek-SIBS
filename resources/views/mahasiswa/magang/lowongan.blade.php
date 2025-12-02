@@ -1,70 +1,34 @@
 @extends('mahasiswa.layouts.app')
-@section('title', 'Daftar Lowongan Magang')
+@section('title', 'Lowongan Magang')
 
 @section('content')
+<div class="max-w-6xl mx-auto px-6 py-8 bg-gradient-to-br from-green-50 to-white min-h-screen">
+    <h1 class="text-4xl font-extrabold text-green-900 mb-8 text-center tracking-tight">Lowongan Magang</h1>
 
-<div class="min-h-screen bg-white max-w-6xl mx-auto py-8">
-    
-    @if(session('success'))
-        <div class="mb-6 bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-2xl text-center shadow-xl">
-            {{ session('success') }}
+    @forelse ($lowongan as $item)
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-green-100 mb-6 hover:shadow-2xl hover:scale-105 transition-all duration-300 ease-in-out transform">
+            <h2 class="text-2xl font-bold text-green-900 mb-2">{{ $item->judul }}</h2>
+            <p class="text-green-700 font-medium mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm3 2a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                </svg>
+                {{ $item->perusahaan }} - {{ $item->lokasi ?? 'Remote' }}
+            </p>
+            <p class="text-green-800 mt-4 leading-relaxed">{{ \Illuminate\Support\Str::limit($item->deskripsi, 150) }}</p>
+            <a href="{{ route('mahasiswa.magang.index') }}" class="inline-flex items-center mt-4 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors duration-200">
+                <span>Ajukan Magang</span>
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
         </div>
-    @endif
-    @if(session('error'))
-        <div class="mb-6 bg-gradient-to-r from-red-500 to-red-600 text-white p-4 rounded-2xl text-center shadow-xl">
-            {{ session('error') }}
+    @empty
+        <div class="text-center py-12">
+            <svg class="w-16 h-16 mx-auto text-green-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            <p class="text-green-700 text-lg font-medium">Belum ada lowongan magang tersedia.</p>
         </div>
-    @endif
-
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-extrabold text-gray-900">
-            <i class="fas fa-briefcase mr-2 text-yellow-600"></i> Lowongan Magang
-        </h1>
-    </div>
-
-    @if ($lowongan->isEmpty())
-        <div class="text-center p-10 bg-gray-50 rounded-lg border border-gray-200">
-            <p class="text-xl text-gray-500">Saat ini belum ada lowongan magang yang tersedia.</p>
-        </div>
-    @else
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ($lowongan as $item)
-                @php
-                    $isApplied = in_array($item->id, $appliedLowonganIds);
-                @endphp
-                <div class="bg-white rounded-lg shadow-xl hover:shadow-2xl transition duration-300 border @if($isApplied) border-green-500 @else border-gray-200 @endif p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-2">{{ $item->judul }}</h2>
-                    <div class="flex items-center text-sm text-gray-600 mb-4">
-                        <i class="fas fa-clock mr-2"></i> 
-                        @if ($item->deadline)
-                            Deadline: <span class="font-medium text-red-600 ml-1">{{ \Carbon\Carbon::parse($item->deadline)->format('d M Y') }}</span>
-                        @else
-                            <span class="font-medium">Tidak Ada Deadline</span>
-                        @endif
-                    </div>
-                    
-                    <p class="text-gray-700 mb-4 line-clamp-3">
-                        {{ Str::limit(strip_tags($item->deskripsi), 150, '...') }}
-                    </p>
-
-                    <div class="flex justify-between items-center mt-4">
-                        <a href="{{ route('mahasiswa.magang.lowongan.show', $item->id) }}" class="text-blue-600 hover:text-blue-800 font-semibold transition">
-                            Lihat Detail &rarr;
-                        </a>
-
-                        @if($isApplied)
-                            <span class="text-sm font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Sudah Melamar</span>
-                        @else
-                            {{-- Button Apply bisa diletakkan di halaman detail --}}
-                            <a href="{{ route('mahasiswa.magang.lowongan.show', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition duration-150 text-sm shadow-md">
-                                Lamar Sekarang
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
+    @endforelse
 </div>
-
 @endsection
