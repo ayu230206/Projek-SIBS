@@ -209,47 +209,47 @@ Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index',
 }); // END: Grup Middleware AUTH
 
     // ============================================
-    // ROUTES KHUSUS ADMIN (FULL CONTROL)
-    // ============================================
-    Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+    // // ROUTES KHUSUS ADMIN (FULL CONTROL)
+    // // ============================================
+    // Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
         
-        // 1. Dashboard Admin
-        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    //     // 1. Dashboard Admin
+    //     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
-        Route::resource('kampus', AdminKampusController::class);
+    //     // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
+    //     Route::resource('kampus', AdminKampusController::class);
         
-        // 3. Manajemen Mahasiswa & Akademik
-        Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-            // Daftar Mahasiswa (CRUD data diri dasar)
-            Route::resource('/', AdminMahasiswaController::class)->except(['show']); 
+    //     // 3. Manajemen Mahasiswa & Akademik
+    //     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+    //         // Daftar Mahasiswa (CRUD data diri dasar)
+    //         Route::resource('/', AdminMahasiswaController::class)->except(['show']); 
             
-            // Data Akademik / Nilai (Mass Upload & OLAP Report) 
-            Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
-            Route::post('nilai/upload', [AdminNilaiController::class, 'massUpload'])->name('nilai.mass_upload'); 
-            Route::get('nilai/report', [AdminNilaiController::class, 'reportOlap'])->name('nilai.olap'); 
-        });
+    //         // Data Akademik / Nilai (Mass Upload & OLAP Report) 
+    //         Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
+    //         Route::post('nilai/upload', [AdminNilaiController::class, 'massUpload'])->name('nilai.mass_upload'); 
+    //         Route::get('nilai/report', [AdminNilaiController::class, 'reportOlap'])->name('nilai.olap'); 
+    //     });
 
-        // 4. Manajemen Program Beasiswa & Pengumuman
-        Route::resource('beasiswa', AdminBeasiswaController::class); 
+    //     // 4. Manajemen Program Beasiswa & Pengumuman
+    //     Route::resource('beasiswa', AdminBeasiswaController::class); 
         
-        // 5. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
-        Route::resource('lowongan', AdminMagangLowonganController::class); 
-        Route::resource('penelitian-lomba', AdminPenelitianLombaController::class); 
+    //     // 5. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
+    //     Route::resource('lowongan', AdminMagangLowonganController::class); 
+    //     Route::resource('penelitian-lomba', AdminPenelitianLombaController::class); 
 
-        // 6. Manajemen Registrasi Ulang & Feedback (Sistem Hard Gate) [Image of User Registration Flowchart with Approval Step]
-        Route::prefix('regis-ulang')->name('regis-ulang.')->group(function () {
-            // Review dan Approval Registrasi Ulang
-            Route::get('/', [AdminRegisUlangController::class, 'index'])->name('index');
-            Route::post('{regis_ulang_id}/approve', [AdminRegisUlangController::class, 'approve'])->name('approve');
-            Route::post('{regis_ulang_id}/reject', [AdminRegisUlangController::class, 'reject'])->name('reject');
+    //     // 6. Manajemen Registrasi Ulang & Feedback (Sistem Hard Gate) [Image of User Registration Flowchart with Approval Step]
+    //     Route::prefix('regis-ulang')->name('regis-ulang.')->group(function () {
+    //         // Review dan Approval Registrasi Ulang
+    //         Route::get('/', [AdminRegisUlangController::class, 'index'])->name('index');
+    //         Route::post('{regis_ulang_id}/approve', [AdminRegisUlangController::class, 'approve'])->name('approve');
+    //         Route::post('{regis_ulang_id}/reject', [AdminRegisUlangController::class, 'reject'])->name('reject');
             
-            // Melihat semua feedback (Kritik dan Saran)
-            Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback');
-        });
+    //         // Melihat semua feedback (Kritik dan Saran)
+    //         Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback');
+    //     });
 
-        // 7. Keuangan (Akses Penuh/Audit untuk Admin)
-        Route::resource('keuangan', AdminKeuanganController::class)->except(['create']); 
-        Route::post('keuangan/{id}/transfer', [AdminKeuanganController::class, 'markAsTransferred'])->name('keuangan.transfer'); 
-    });
-    // END: Grup Prefix Admin
+    //     // 7. Keuangan (Akses Penuh/Audit untuk Admin)
+    //     Route::resource('keuangan', AdminKeuanganController::class)->except(['create']); 
+    //     Route::post('keuangan/{id}/transfer', [AdminKeuanganController::class, 'markAsTransferred'])->name('keuangan.transfer'); 
+    // });
+    // // END: Grup Prefix Admin
