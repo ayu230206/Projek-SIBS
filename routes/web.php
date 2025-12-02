@@ -157,6 +157,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
 
         Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
+<<<<<<< HEAD
         Route::resource('feedback', BpdpksFeedbackController::class)->only(['index', 'show']);
     });
 });
+=======
+    }); // END: Grup Prefix BPDPKS
+
+
+}); 
+>>>>>>> c898c16f41558f32b8b8e9199762511f8af006f7
