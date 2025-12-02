@@ -50,7 +50,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Kampus::class, 'asal_kampus', 'id');
     }
-<<<<<<< HEAD
+
 
     public function detailMahasiswa()
 {
@@ -58,6 +58,6 @@ class User extends Authenticatable
     return $this->hasOne(MahasiswaDetail::class, 'user_id');
 }
 }
-=======
-}
->>>>>>> 941515b068017348989b0ed18436835daf8708e7
+
+
+

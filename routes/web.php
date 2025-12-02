@@ -139,7 +139,6 @@ Route::middleware(['auth'])->group(function () {
         });
 
         // AKADEMIK MAHASISWA
-        // AKADEMIK MAHASISWA
         Route::prefix('akademik')->name('akademik.')->group(function () {
 
             // Dashboard Akademik Mahasiswa
