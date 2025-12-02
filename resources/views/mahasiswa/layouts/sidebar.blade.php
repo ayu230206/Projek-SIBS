@@ -53,6 +53,12 @@
             </svg>
             <span class="font-medium">Lowongan Kerja</span>
         </a>
+        <a href="#" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+            <svg class="w-6 h-6 mr-3 group-hover:text-green-200 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z"></path>
+            </svg>
+            <span class="font-medium">Feedback</span>
+        </a>
 
         <a href="{{ route('mahasiswa.notifikasi') }}" class="relative flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg transition-all">
             <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +90,5 @@
             </span>
             @endif
         </a>
-
-
     </nav>
 </aside>
