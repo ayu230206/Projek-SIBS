@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Mahasiswa; // <- tetap di sini
+namespace App\Models\Mahasiswa;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,6 @@ class Magang extends Model
         'selesai',
         'status_pengajuan',
         'tanggal_pengajuan',
-        'gambar',
         'file_pendukung'
     ];
 

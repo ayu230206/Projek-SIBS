@@ -3,6 +3,12 @@
 
 @section('content')
 
+
+<div class="min-h-screen py-8 bg-gradient-to-br from-green-50 to-white">
+
+<h1 class="text-4xl font-extrabold text-green-900 mb-8 text-center tracking-tight">Lowongan Magang</h1>
+>>>>>>> dbd3e5162becce98ca9fe710909d850501914f10
+
 <div class="min-h-screen bg-white max-w-6xl mx-auto py-8">
     
     @if(session('success'))
