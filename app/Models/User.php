@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable; // WAJIB untuk notifikasi
 use App\Models\Kampus;
 use App\Models\Bpdpks\Keuangan;
 use App\Models\MahasiswaDetail;
-
 
 class User extends Authenticatable
 {
@@ -50,14 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Kampus::class, 'asal_kampus', 'id');
     }
-<<<<<<< HEAD
 
     public function detailMahasiswa()
-{
-    // Relasi one-to-one ke detail mahasiswa
-    return $this->hasOne(MahasiswaDetail::class, 'user_id');
+    {
+        return $this->hasOne(MahasiswaDetail::class, 'user_id', 'id');
+    }
 }
-}
-=======
-}
->>>>>>> 941515b068017348989b0ed18436835daf8708e7

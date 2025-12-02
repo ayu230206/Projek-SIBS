@@ -15,20 +15,19 @@
         </div>
     </div>
 
-
+    {{-- CARD SECTION (tetap sama) --}}
     <section id="keuangan" class="row g-4 mb-4">
         {{-- CARD 1: Total Recipients --}}
         <div class="col-md-4">
             <div class="card-custom p-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div style="font-size:0.88rem; color:#6b776f;">Total Recipients</div>
-                        {{-- Angka sudah dikoreksi menjadi 7000 --}}
-                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)">7000</div>
+                        <div style="font-size:0.88rem; color:#6b776f;">Total Mahasiswa Penerima</div>
+                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)" id="totalRecipients">{{ $chartData['totalRecipients'] ?? 0 }}</div>
                     </div>
                     <div style="text-align:right">
-                        <div style="font-size:0.8rem; color:#7b8a82">This year</div>
-                        <div style="font-weight:700; color:var(--accent)">+8.4%</div>
+                        <div style="font-size:0.8rem; color:#7b8a82">Data Per</div>
+                        <div style="font-weight:700; color:var(--accent)">Saat Ini</div>
                     </div>
                 </div>
             </div>
@@ -39,12 +38,12 @@
             <div class="card-custom p-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div style="font-size:0.88rem; color:#6b776f;">Active Campuses</div>
-                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)">10</div>
+                        <div style="font-size:0.88rem; color:#6b776f;">Kampus Aktif</div>
+                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)" id="activeCampuses">{{ $chartData['activeCampuses'] ?? 0 }}</div>
                     </div>
                     <div style="text-align:right">
-                        <div style="font-size:0.8rem; color:#7b8a82">Monitored</div>
-                        <div style="font-weight:700; color:var(--accent)">Premium</div>
+                        <div style="font-size:0.8rem; color:#7b8a82">Kerjasama</div>
+                        <div style="font-weight:700; color:var(--accent)">Aktif</div>
                     </div>
                 </div>
             </div>
@@ -55,12 +54,12 @@
             <div class="card-custom p-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <div style="font-size:0.88rem; color:#6b776f;">Pending Approvals</div>
-                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)">6</div>
+                        <div style="font-size:0.88rem; color:#6b776f;">Persetujuan Pending</div>
+                        <div style="font-size:1.55rem; font-weight:700; color:var(--primary)" id="pendingApprovals">{{ $pendingApprovals ?? 0 }}</div>
                     </div>
                     <div style="text-align:right">
-                        <div style="font-size:0.8rem; color:#7b8a82">Internships</div>
-                        <div style="font-weight:700; color:#e07a5f">Action needed</div>
+                        <div style="font-size:0.8rem; color:#7b8a82">Magang/Kampus</div>
+                        <div style="font-weight:700; color:#e07a5f">Perlu Tindakan</div>
                     </div>
                 </div>
             </div>
@@ -72,7 +71,6 @@
         <div class="col-lg-12">
             <h2 class="section-title"><i class="fas fa-chart-line me-2"></i> Data Mahasiswa (OLAP) - Rata-rata IP per Kampus</h2>
             
-            {{-- MODIFIKASI: Menambahkan tautan navigasi ke halaman Data Mahasiswa Penerima --}}
             <p class="subtle mt-2 mb-4">
                 Analisis visual data IPK. Untuk melihat **daftar lengkap data diri dan performa akademik mahasiswa**,
                 silakan klik: <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="btn btn-sm btn-outline-primary ms-2">
@@ -85,25 +83,20 @@
         <div class="col-lg-8">
             <div class="card-custom p-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="section-title">Average IPK — by Campus</div>
+                    <div class="section-title"><span id="chartTitle">Average IPK — All Campuses</span></div>
                     <div>
-                        <select id="filterCampus" class="form-select form-select-sm">
-                            <option value="all">All campuses</option>
-                            <option value="PCR">PCR</option>
-                            <option value="UNRI">UNRI</option>
-                            <option value="UNILAK">UNILAK</option>
-                            <option value="UIN Suska">UIN Suska</option>
-                            <option value="UMRI">UMRI</option>
-                            <option value="INSTIPER">INSTIPER</option>
-                            <option value="UNDIP">UNDIP</option>
-                            <option value="POLBANGTAN">POLBANGTAN</option>
-                            <option value="IPB">IPB</option>
-                            <option value="ITERA">ITERA</option>
+                        {{-- FILTER KAMPUS DINAMIS --}}
+                        <select id="filterKampusChart" class="form-select form-select-sm">
+                            <option value="all">Semua Kampus</option>
+                            @foreach ($allKampus as $kampus)
+                                <option value="{{ $kampus->id }}">
+                                    {{ $kampus->nama_kampus }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="chart-box">
-                    {{-- Pastikan elemen <canvas id="barChart"> ada di dalam card --}}
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
@@ -114,7 +107,6 @@
             <div class="card-custom p-3">
                 <div class="section-title">IPK Distribution</div>
                 <div class="chart-box" style="display: flex; justify-content: center;">
-                    {{-- Pastikan elemen <canvas id="donutChart"> ada di dalam card --}}
                     <canvas id="donutChart" style="max-width:240px;"></canvas>
                 </div>
                 <div style="margin-top:10px; font-size:0.95rem; color:#5f6b66;">
@@ -126,13 +118,9 @@
         </div>
     </section>
     
-    {{-- HAPUS: Bagian ini dihapus karena data detail dipindahkan ke route 'bpdpks.datamahasiswa.index' --}}
-    {{-- <hr> --}}
-    {{-- <section id="data-mahasiswa-table" class="mb-4"> ... </section> --}}
-    {{-- <hr> --}}
-    
     <hr>
     
+    {{-- PERSISTENCE/APPROVAL SECTION (tetap sama) --}}
     <section id="persetujuan" class="mb-4">
         <div class="card-custom p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -172,31 +160,38 @@
 
 @section('scripts')
     <script>
-        // FIX: Jangan pakai nama getComputedStyle karena bentrok dengan bawaan browser
+        // Data PHP yang di-pass ke JavaScript (Inisialisasi)
+        const initialBarLabels = @json($chartData['barLabels']);
+        const initialBarData = @json($chartData['barData']);
+        const initialDonutData = @json($chartData['donutData']);
+        const initialDonutLabels = @json($chartData['donutLabels']);
+        
+        let barChart;
+        let donutChart;
+
         function getCssVar(el) {
             return window.getComputedStyle(el);
         }
         
         // Ambil warna dari CSS
-        const primaryColor   = getCssVar(document.documentElement).getPropertyValue('--primary').trim()   || '#0b3a2e';
+        const primaryColor = getCssVar(document.documentElement).getPropertyValue('--primary').trim()  || '#0b3a2e';
         const secondaryColor = getCssVar(document.documentElement).getPropertyValue('--secondary').trim() || '#bfa15a';
-        const dangerColor    = getCssVar(document.documentElement).getPropertyValue('--danger').trim()    || '#e07a5f';
+        const dangerColor = getCssVar(document.documentElement).getPropertyValue('--danger').trim() || '#e07a5f';
         
-        $(document).ready(function() {
-            
-            // HAPUS: Inisialisasi DataTable untuk recipientsTable karena section-nya sudah dihapus
-            // $('#recipientsTable').DataTable({}); 
-            $('#internTable').DataTable({});
-
-            // Bar Chart
+        // Fungsi untuk menginisialisasi/mengupdate grafik
+        function initializeCharts(barLabels, barData, donutData, donutLabels) {
+             // Bar Chart
             const barCtx = document.getElementById('barChart');
-            new Chart(barCtx, {
+            if (barChart) {
+                barChart.destroy(); // Hancurkan chart lama jika ada
+            }
+            barChart = new Chart(barCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['PCR', 'UNRI', 'UNILAK', 'UIN Suska', 'UMRI', 'INSTIPER', 'UNDIP', 'POLBANGTAN', 'IPB', 'ITERA'],
+                    labels: barLabels, 
                     datasets: [{
                         label: 'Rata-rata IPK',
-                        data: [3.85, 3.68, 3.72, 3.55, 3.79, 3.81, 3.60, 3.90, 3.75, 3.65],
+                        data: barData, 
                         backgroundColor: primaryColor,
                         borderColor: primaryColor,
                         borderWidth: 1
@@ -210,18 +205,24 @@
                             max: 4.0,
                             min: 3.0
                         }
-                    }
+                    },
+                     plugins: {
+                         legend: { display: false }
+                     }
                 }
             });
 
             // Donut Chart
             const donutCtx = document.getElementById('donutChart');
-            new Chart(donutCtx, {
+             if (donutChart) {
+                donutChart.destroy(); // Hancurkan chart lama jika ada
+            }
+            donutChart = new Chart(donutCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Excellent (≥ 3.8)', 'Good (3.5 – 3.79)', 'Needs Attention (< 3.5)'],
+                    labels: donutLabels, 
                     datasets: [{
-                        data: [40, 50, 10],
+                        data: donutData, 
                         backgroundColor: [
                             primaryColor,
                             secondaryColor,
@@ -238,11 +239,50 @@
                     }
                 }
             });
+        }
+        
+        // Fungsi AJAX untuk mengambil data baru berdasarkan filter
+        function updateCharts(kampusId) {
+            // Tampilkan loading state jika perlu
+            $('#chartTitle').text('Loading data...');
 
-            // HAPUS: Search events untuk recipientsTable karena section-nya sudah dihapus
-            // $('#tableSearch').on('keyup', function() {
-            //     $('#recipientsTable').DataTable().search(this.value).draw();
-            // });
+            $.ajax({
+                url: "{{ route('bpdpks.chartdata.api') }}", // Panggil rute baru
+                method: 'GET',
+                data: { kampus_id: kampusId },
+                success: function(data) {
+                    // Update judul chart
+                    const selectedKampus = $('#filterKampusChart option:selected').text();
+                    $('#chartTitle').text(`Average IPK — ${selectedKampus}`);
+                    
+                    // Update Card
+                    $('#totalRecipients').text(data.totalRecipients);
+                    
+                    // Re-inisialisasi/update grafik
+                    initializeCharts(data.barLabels, data.barData, data.donutData, data.donutLabels);
+                },
+                error: function(xhr) {
+                    console.error('Error fetching chart data:', xhr);
+                    $('#chartTitle').text('Average IPK — Error Loading Data');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            
+            $('#internTable').DataTable({});
+
+            // 1. Inisialisasi Grafik dengan data dari Controller saat load
+            initializeCharts(initialBarLabels, initialBarData, initialDonutData, initialDonutLabels);
+            
+            // Set Judul Awal
+            $('#chartTitle').text('Average IPK — Semua Kampus');
+
+            // 2. Event Listener untuk filter
+            $('#filterKampusChart').on('change', function() {
+                const selectedId = $(this).val();
+                updateCharts(selectedId);
+            });
 
             $('#internSearch').on('keyup', function() {
                 $('#internTable').DataTable().search(this.value).draw();
