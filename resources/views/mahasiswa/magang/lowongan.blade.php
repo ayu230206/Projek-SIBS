@@ -7,7 +7,7 @@
 <div class="min-h-screen py-8 bg-gradient-to-br from-green-50 to-white">
 
 <h1 class="text-4xl font-extrabold text-green-900 mb-8 text-center tracking-tight">Lowongan Magang</h1>
->>>>>>> dbd3e5162becce98ca9fe710909d850501914f10
+
 
 <div class="min-h-screen bg-white max-w-6xl mx-auto py-8">
     
@@ -62,7 +62,7 @@
                             <span class="text-sm font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full"><i class="fas fa-check-circle mr-1"></i> Sudah Melamar</span>
                         @else
                             {{-- Button Apply bisa diletakkan di halaman detail --}}
-                            <a href="{{ route('mahasiswa.magang.lowongan.show', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition duration-150 text-sm shadow-md">
+                            <a href="{{ route('mahasiswa.magang.index', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition duration-150 text-sm shadow-md">
                                 Lamar Sekarang
                             </a>
                         @endif

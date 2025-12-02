@@ -11,31 +11,37 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function store(Request $request, $post_id)
-    {
-        $request->validate([
-            'komentar' => 'required|string|max:1000',
-        ]);
+{
+    $request->validate([
+        'komentar' => 'required|string|max:1000',
+    ]);
 
-        Comment::create([
-            'post_id' => $post_id,
-            'user_id' => Auth::id(),
-            'komentar' => $request->komentar,
-        ]);
+    $comment = Comment::create([
+        'post_id' => $post_id,
+        'user_id' => Auth::id(),
+        'komentar' => $request->komentar,
+    ]);
 
-        return back()->with('success', 'Komentar berhasil ditambahkan!');
+    // Kirim notifikasi ke pemilik post (kecuali komentarnya sendiri)
+    $post = \App\Models\Mahasiswa\Post::findOrFail($post_id);
+    if ($post->user_id !== Auth::id()) {
+        $post->user->notify(new \App\Notifications\CommentNotification($post, $comment->komentar));
     }
 
-    public function destroy($comment_id)
-    {
-        $comment = Comment::findOrFail($comment_id);
+    return back()->with('success', 'Komentar berhasil ditambahkan!');
+}
 
-        if ($comment->user_id !== Auth::id()) {
-            abort(403, 'Akses ditolak.');
-        }
+public function destroy($comment_id)
+{
+    $comment = Comment::findOrFail($comment_id);
 
-        $comment->delete();
-
-        return back()->with('success', 'Komentar berhasil dihapus.');
+    if ($comment->user_id !== Auth::id()) {
+        abort(403, 'Akses ditolak.');
     }
-    
+
+    $comment->delete();
+
+    return back()->with('success', 'Komentar berhasil dihapus.');
+}
+
 }
