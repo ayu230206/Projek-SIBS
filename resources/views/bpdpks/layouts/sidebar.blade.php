@@ -35,12 +35,11 @@
             <a href="#persetujuan" class="sidebar-menu-link">
                 <i class="fas fa-check-circle"></i> Persetujuan (Magang/Kampus)
             </a>
-        </li>
-        <li class="sidebar-menu-item">
-            <a href="#feedback" class="sidebar-menu-link">
-                <i class="fas fa-comment-dots"></i> Feedback Mahasiswa
-            </a>
-        </li>
+      <li class="sidebar-menu-item">
+    <a href="{{ route('bpdpks.feedback.index') }}" class="sidebar-menu-link">
+        <i class="fas fa-comment-dots"></i> Feedback Mahasiswa
+    </a>
+</li>
     </ul>
 
     <div class="sidebar-footer">
