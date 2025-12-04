@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Kampus;
+use App\Models\Bpdpks\Kampus; // Pastikan namespace Kampus benar (App\Models\Bpdpks\Kampus atau App\Models\Kampus)
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // --- REGISTER (Fitur ini mungkin jarang dipakai jika Admin yang buatkan akun) ---
     public function showRegister()
     {
-        $kampus = Kampus::all();
+        // Sesuaikan model Kampus jika namespace-nya berbeda
+        // $kampus = \App\Models\Bpdpks\Kampus::all(); 
+        $kampus = Kampus::all(); 
         return view('auth.register', compact('kampus'));
     }
 
@@ -31,7 +34,7 @@ class AuthController extends Controller
             'nama_lengkap' => $request->nama_lengkap,
             'email'        => $request->email,
             'password'     => Hash::make($request->password),
-            'role'         => 'mahasiswa',
+            'role'         => 'mahasiswa', // Default Role
             'asal_kampus'  => $request->asal_kampus,
             'angkatan'     => $request->angkatan,
             'status_aktif' => true
@@ -40,6 +43,7 @@ class AuthController extends Controller
         return redirect()->route('login')->with('status', 'Registrasi berhasil, silakan login.');
     }
 
+    // --- LOGIN ---
     public function showLogin()
     {
         return view('auth.login');
@@ -47,6 +51,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        // 1. Validasi Input
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required'
@@ -57,23 +62,35 @@ class AuthController extends Controller
             'password' => $request->password
         ];
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
-            $role = Auth::user()->role;
+        // 2. Ingat Saya (Remember Me)
+        $remember = $request->has('remember');
 
-            switch ($role) {
+        // 3. Coba Login
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            $user = Auth::user();
+
+            // Cek Status Aktif (Opsional: Jika ingin membatasi login user non-aktif)
+            if ($user->status_aktif == 0) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun Anda dinonaktifkan. Silakan hubungi Admin.']);
+            }
+
+            // Redirect Berdasarkan Role
+            switch ($user->role) {
                 case 'admin':
                     return redirect()->intended('/admin/dashboard');
                 case 'bpdpks':
                     return redirect()->intended('/bpdpks/dashboard');
                 case 'mahasiswa':
-                    return redirect()->intended('/dashboard');
+                    return redirect()->intended('/mahasiswa/dashboard'); // Pastikan route ini ada!
                 default:
                     Auth::logout();
                     return redirect()->route('login')->withErrors(['email' => 'Role akun tidak dikenali.']);
             }
         }
 
+        // 4. Jika Gagal Login
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');

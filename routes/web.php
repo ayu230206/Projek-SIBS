@@ -203,6 +203,7 @@ Route::middleware(['bpdpks'])->prefix('bpdpks')->name('bpdpks.')->group(function
 // ============================================
 // Menggunakan alias string jika sudah didaftarkan di bootstrap/app.php
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
+    
 
     // 1. Dashboard Admin
     // PERBAIKAN UTAMA: Mengubah rute '/' menjadi '/dashboard' agar URL menjadi /admin/dashboard
@@ -216,8 +217,7 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Route untuk Membuka Halaman Pengaturan
     Route::get('/pengaturan', [AdminDashboardController::class, 'settings'])->name('settings');
 
-
-    // a. Route Khusus untuk Tambah Mahasiswa Otomatis (HARUS DI ATAS Resource 'users')
+     // a. Route Khusus untuk Tambah Mahasiswa Otomatis (HARUS DI ATAS Resource 'users')
     // URL: /admin/users/create-mahasiswa
     Route::get('/users/create-mahasiswa', [UserManagementController::class, 'createMahasiswa'])->name('users.create_mahasiswa');
     Route::post('/users/store-mahasiswa', [UserManagementController::class, 'storeMahasiswa'])->name('users.store_mahasiswa');

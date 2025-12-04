@@ -11,11 +11,15 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        
+        // Mengambil data postingan forum terbaru
         $posts = Post::with('user', 'comments', 'likes')
-                     ->orderBy('tanggal_post', 'desc')
-                     ->get();
+                      ->orderBy('tanggal_post', 'desc')
+                      ->get();
+
         return view('mahasiswa.dashboard', [
-            'user' => $user
+            'user' => $user,
+            'posts' => $posts // Saya tambahkan ini agar data posts bisa dipakai di view
         ]);
     }
 }

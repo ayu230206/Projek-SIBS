@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\BeasiswaProgram; // Asumsi Model BeasiswaProgram ada
+use App\Models\Admin\BeasiswaProgram; // Asumsi Model BeasiswaProgram ada
 
 class DataBeasiswaController extends Controller
 {

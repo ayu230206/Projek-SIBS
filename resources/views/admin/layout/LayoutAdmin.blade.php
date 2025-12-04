@@ -13,9 +13,9 @@
         - content-shifted: Mengaktifkan margin-left 260px di desktop.
         - padding-top: 90px: Jarak aman dari Navbar fixed.
     --}}
-    <main class="bg-light content-shifted" style="padding-top: 90px; min-height: 100vh;">
+    <main class="flex-grow-1 p-5 content-shifted konten-utama-bpdpks" style="padding-top: 90px; min-height: 100vh;">
         
-        <div class="container-fluid p-4">
+        <div class="konten-sebenarnya container-fluid p-4">
             
             {{-- Flash Messages (Notifikasi Sukses/Gagal) --}}
             @if (session('success'))
