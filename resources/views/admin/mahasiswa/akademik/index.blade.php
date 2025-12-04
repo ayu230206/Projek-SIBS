@@ -1,57 +1,51 @@
 @extends('admin.layout.LayoutAdmin')
 
-@section('title', 'Manajemen Nilai Akademik')
-
 @section('content')
-<div class="card shadow-lg">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">Daftar Nilai Akademik Mahasiswa</h4>
-        <div>
-            <a href="{{ route('admin.mahasiswa.akademik.import.form') }}" class="btn btn-warning me-2">
-                <i class="fas fa-upload me-1"></i> Mass Upload Nilai
-            </a>
-        </div>
+<div class="container">
+    <h3>Data Akademik Mahasiswa</h3>
+    <div class="mb-3 text-end">
+        {{-- Tombol dummy import --}}
+        <a href="{{ route('admin.mahasiswa.akademik.import.form') }}" class="btn btn-success">
+            <i class="fas fa-file-excel"></i> Import Excel
+        </a>
     </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover table-striped mb-0">
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th>NIM</th>
-                        <th>Nama Mahasiswa</th>
+                        <th>No</th>
+                        <th>Nama</th>
                         <th>Kampus</th>
-                        <th>IPS Terakhir</th>
-                        <th>IPK Kumulatif</th>
-                        <th style="width: 15%;">Aksi</th>
+                        <th>IPK Saat Ini</th>
+                        <th>Semester</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($mahasiswaAkademik as $index => $data)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $data->nim }}</td>
-                            <td>{{ $data->user->nama_lengkap ?? 'N/A' }}</td>
-                            <td>{{ $data->kampus->nama_kampus ?? 'N/A' }}</td>
-                            <td><span class="badge bg-secondary">{{ $data->ips_terakhir ?? '-' }}</span></td>
-                            <td><span class="badge bg-primary">{{ $data->ipk ?? '-' }}</span></td>
-                            <td>
-                                <a href="{{ route('admin.mahasiswa.akademik.edit', $data->id) }}" class="btn btn-sm btn-outline-primary" title="Edit Nilai">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center">Tidak ada data akademik mahasiswa.</td>
-                        </tr>
-                    @endforelse
+                    @foreach($dataMahasiswa as $mhs)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $mhs->user->nama_lengkap ?? '-' }}</td>
+                        <td>{{ $mhs->kampus->nama_kampus ?? '-' }}</td>
+                        <td class="fw-bold text-center">{{ $mhs->ipk ?? '0.00' }}</td>
+                        <td class="text-center">{{ $mhs->semester_berjalan ?? 1 }}</td>
+                        <td>
+                            <a href="{{ route('admin.mahasiswa.akademik.edit', $mhs->id) }}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i> Update Nilai
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
+            {{ $dataMahasiswa->links() }}
         </div>
-    </div>
-    <div class="card-footer">
-        {{ $mahasiswaAkademik->links() }}
     </div>
 </div>
 @endsection

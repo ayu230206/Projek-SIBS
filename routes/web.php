@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\PenelitianLombaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Bpdpks\DataMahasiswaController;
 use App\Http\Controllers\Bpdpks\FeedbackController as BpdpksFeedbackController;
+use App\Http\Controllers\Admin\UserManagementController;
 // ============================================
 // BPDPKS Controllers
 // ============================================
@@ -45,7 +46,7 @@ use App\Http\Controllers\Mahasiswa\ProyekAkhirController; // <-- DITAMBAHKAN
 use App\Http\Middleware\IsBpdpks; // <-- DITAMBAHKAN
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AdminDataMahasiswaController;
 // ============================================
 // 1. ROOT & AUTH ROUTES
 // ============================================
@@ -210,6 +211,21 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Redirect: Agar akses /admin tetap mengarah ke /admin/dashboard
     Route::redirect('/', 'dashboard');
 
+    // Route Khusus Update Logo
+    Route::post('/update-logo', [App\Http\Controllers\Admin\AdminDashboardController::class, 'updateLogo'])->name('logo.update');
+    // Route untuk Membuka Halaman Pengaturan
+    Route::get('/pengaturan', [AdminDashboardController::class, 'settings'])->name('settings');
+
+
+    // a. Route Khusus untuk Tambah Mahasiswa Otomatis (HARUS DI ATAS Resource 'users')
+    // URL: /admin/users/create-mahasiswa
+    Route::get('/users/create-mahasiswa', [UserManagementController::class, 'createMahasiswa'])->name('users.create_mahasiswa');
+    Route::post('/users/store-mahasiswa', [UserManagementController::class, 'storeMahasiswa'])->name('users.store_mahasiswa');
+
+    // b. Route Resource Standar (List User, Create Admin, Edit, Delete)
+    // Otomatis membuat route bernama: admin.users.index, admin.users.store, dll.
+    Route::resource('users', UserManagementController::class);
+
     // Rute Logout Admin harus menggunakan AuthController::logout yang sudah didefinisikan di grup 'auth'
     // Jika perlu rute logout terpisah, pastikan AdminDashboardController memiliki method logout.
     // Jika tidak, hapus rute ini dan gunakan rute logout umum di atas.
@@ -217,12 +233,14 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Route::post('/logout', [AdminDashboardController::class, 'logout'])->name('logout'); // <-- DIHAPUS
 
     // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
-    Route::resource('kampus', AdminKampusController::class);
+    Route::resource('kampus', AdminKampusController::class)->parameters([
+    'kampus' => 'kampus' // Memaksa nama parameter jadi {kampus}
+]);
 
     // 3. Manajemen Mahasiswa & Akademik
     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
         // Daftar Mahasiswa (CRUD data diri dasar)
-        Route::resource('data', AdminMahasiswaController::class)->except(['show']); // Mengubah '/' menjadi 'data' untuk menghindari konflik rute
+        Route::resource('data', AdminDataMahasiswaController::class); // Mengubah '/' menjadi 'data' untuk menghindari konflik rute
 
         // Data Akademik / Nilai (Mass Upload & Manual Input) - Menggunakan AdminMahasiswaAkademikController
         Route::prefix('akademik')->name('akademik.')->group(function () {

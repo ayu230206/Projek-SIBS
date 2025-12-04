@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PenelitianLomba;
+use App\Models\Admin\PenelitianLomba;
 
 class PenelitianLombaController extends Controller
 {
@@ -16,10 +16,10 @@ class PenelitianLombaController extends Controller
     {
         // Variabel yang digunakan di views harus konsisten. Menggunakan 'data' atau 'program'
         // Saya akan menggunakan 'data' sesuai kode Anda, tetapi pastikan view index Anda menggunakan nama yang sama.
-        $data = PenelitianLomba::latest()->paginate(10);
+        $dataPenelitianLomba = PenelitianLomba::latest()->paginate(10);
         // Note: Pada jawaban sebelumnya, view index menggunakan variabel $dataPenelitianLomba, 
         // pastikan Anda menyesuaikan di salah satu tempat. Saya menggunakan 'data' di controller ini.
-        return view('admin.penelitian dan lomba.index', compact('data')); 
+        return view('admin.mahasiswa.penelitian dan lomba.index', compact('dataPenelitianLomba')); 
     }
 
     /**
@@ -28,7 +28,7 @@ class PenelitianLombaController extends Controller
      */
     public function create()
     {
-        return view('admin.penelitian dan lomba.create');
+        return view('admin.mahasiswa.penelitian dan lomba.create');
     }
 
     /**
@@ -56,7 +56,7 @@ class PenelitianLombaController extends Controller
      */
     public function edit(PenelitianLomba $penelitianLomba)
     {
-        return view('admin.penelitian dan lomba.edit', compact('penelitianLomba'));
+        return view('admin.mahasiswa.penelitian dan lomba.edit', compact('penelitianLomba'));
     }
 
     /**

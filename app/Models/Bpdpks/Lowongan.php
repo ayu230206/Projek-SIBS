@@ -1,9 +1,5 @@
 <?php
 namespace App\Models\Bpdpks;
-
-
-
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User; // Perlu di-import

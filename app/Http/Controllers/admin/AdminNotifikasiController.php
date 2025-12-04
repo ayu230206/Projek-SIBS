@@ -16,7 +16,7 @@ class NotifikasiController extends Controller
     public function index()
     {
         $notifikasis = Notifikasi::latest()->paginate(10);
-        return view('admin.Notifikasi dan Pengumuman.index', compact('notifikasis'));
+        return view('admin.mahasiswa.Notifikasi dan Pengumuman.index', compact('notifikasis'));
     }
 
     /**
@@ -25,7 +25,7 @@ class NotifikasiController extends Controller
      */
     public function create()
     {
-        return view('admin.Notifikasi dan Pengumuman.create');
+        return view('admin.mahasiswa.Notifikasi dan Pengumuman.create');
     }
 
     /**
@@ -57,7 +57,7 @@ class NotifikasiController extends Controller
      */
     public function edit(Notifikasi $notifikasi)
     {
-        return view('admin.Notifikasi dan Pengumuman.edit', compact('notifikasi'));
+        return view('admin.mahasiswa.Notifikasi dan Pengumuman.edit', compact('notifikasi'));
     }
 
     /**
