@@ -3,26 +3,41 @@
 namespace App\Http\Controllers\Bpdpks;
 
 use App\Http\Controllers\Controller;
-// --- PERBAIKAN DI SINI: Hapus 'Bpdpks\' dari path Model ---
-use App\Models\Bpdpks\Lowongan;
-use App\Models\Bpdpks\LowonganAplikasi;
- // Mengganti: use App\Models\Bpdpks\LowonganAplikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-// Pastikan Anda juga mengimpor Model User
-use App\Models\User;
+// Import Model yang sudah ada di namespace App\Models\Bpdpks\
+use App\Models\Bpdpks\Lowongan;
+use App\Models\Bpdpks\LowonganAplikasi;
+// Pastikan User Model diimport dari App\Models\
+use App\Models\User; 
 
 class LowonganController extends Controller
 {
-    // --- CRUD LOWONGAN/MAGANG (ADMIN VIEW) ---
+    /**
+     * Pastikan hanya Admin atau BPDPKS yang dapat mengakses fitur ini (CRUD Lowongan).
+     */
+    public function __construct()
+    {
+        // ASUMSI: Anda telah membuat Middleware untuk Role checking (misalnya, via Spatie Permissions atau custom middleware)
+        $this->middleware('auth');
+        // Gunakan middleware untuk membatasi akses pada role admin atau bpdpks
+        // $this->middleware('role:admin,bpdpks'); 
+    }
 
+    // --- CRUD LOWONGAN/MAGANG (ADMIN/BPDPKS VIEW) ---
+
+    /**
+     * Menampilkan daftar Lowongan/Magang dan statistik aplikasi pending.
+     */
     public function index(Request $request)
     {
         $tipe = $request->get('tipe', 'semua');
         $search = $request->get('search');
 
         $lowongans = Lowongan::withCount('aplikasi')
+            // Relasi diinputOleh untuk menampilkan siapa yang membuat post
+            ->with('diinputOleh') 
             ->orderBy('deadline', 'desc');
 
         if ($tipe != 'semua') {
@@ -35,17 +50,25 @@ class LowonganController extends Controller
 
         $lowongans = $lowongans->paginate(10)->withQueryString();
 
-        // Mengambil data aplikasi yang masih berstatus 'diajukan' untuk ditampilkan di notifikasi
+        // Mengambil data aplikasi yang masih berstatus 'diajukan'
         $pendingAplikasiCount = LowonganAplikasi::where('status', 'diajukan')->count();
+
+        // 
 
         return view('bpdpks.lowongan.index', compact('lowongans', 'tipe', 'search', 'pendingAplikasiCount'));
     }
 
+    /**
+     * Menampilkan formulir pembuatan Lowongan/Magang baru.
+     */
     public function create()
     {
         return view('bpdpks.lowongan.create');
     }
 
+    /**
+     * Menyimpan data Lowongan/Magang baru.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -53,7 +76,7 @@ class LowonganController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'kualifikasi' => 'nullable|string',
-            'deadline' => 'nullable|date',
+            'deadline' => 'nullable|date|after_or_equal:today', // Deadline harus hari ini atau setelahnya
         ]);
 
         Lowongan::create([
@@ -61,19 +84,24 @@ class LowonganController extends Controller
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
             'kualifikasi' => $request->kualifikasi,
-            // ID pengguna yang sedang login (harus admin/bpdpks)
-            'diinput_oleh_id' => Auth::id(), 
+            'diinput_oleh_id' => Auth::id(), // ID Admin/BPDPKS yang sedang login
             'deadline' => $request->deadline,
         ]);
 
         return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil ditambahkan!');
     }
 
+    /**
+     * Menampilkan formulir edit Lowongan/Magang.
+     */
     public function edit(Lowongan $lowongan)
     {
         return view('bpdpks.lowongan.edit', compact('lowongan'));
     }
 
+    /**
+     * Memperbarui data Lowongan/Magang.
+     */
     public function update(Request $request, Lowongan $lowongan)
     {
         $request->validate([
@@ -81,7 +109,7 @@ class LowonganController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'kualifikasi' => 'nullable|string',
-            'deadline' => 'nullable|date',
+            'deadline' => 'nullable|date|after_or_equal:today',
         ]);
 
         $lowongan->update($request->only(['tipe', 'judul', 'deskripsi', 'kualifikasi', 'deadline']));
@@ -89,19 +117,34 @@ class LowonganController extends Controller
         return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil diperbarui!');
     }
 
+    /**
+     * Menghapus data Lowongan/Magang.
+     */
     public function destroy(Lowongan $lowongan)
     {
+        // Tambahkan konfirmasi penghapusan (disarankan di sisi view/frontend)
         $lowongan->delete();
         return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil dihapus!');
     }
     
-    // --- MONITORING APLIKASI ---
+    // --- MONITORING APLIKASI OLEH ADMIN/BPDPKS ---
 
+    /**
+     * Menampilkan daftar aplikasi yang masuk untuk Lowongan/Magang tertentu.
+     */
     public function monitoringAplikasi(Request $request, Lowongan $lowongan)
     {
+        // Pastikan hanya Admin/BPDPKS yang bisa mengakses
+        if (!in_array(Auth::user()->role, ['admin', 'bpdpks'])) {
+            abort(403, 'Akses ditolak.');
+        }
+
         $status = $request->get('status', 'semua');
 
-        $aplikasis = $lowongan->aplikasi()->with('mahasiswa')
+        $aplikasis = $lowongan->aplikasi()->with(['mahasiswa' => function ($query) {
+            // Load detail mahasiswa (NIM, Kampus, Prodi)
+            $query->with('detailMahasiswa.kampus'); 
+        }])
             ->orderBy('created_at', 'desc');
 
         if ($status != 'semua') {
@@ -113,8 +156,16 @@ class LowonganController extends Controller
         return view('bpdpks.lowongan.monitoring_aplikasi', compact('lowongan', 'aplikasis', 'status'));
     }
 
+    /**
+     * Memproses (Menerima/Menolak) aplikasi dari Mahasiswa.
+     */
     public function prosesAplikasi(Request $request, LowonganAplikasi $aplikasidata)
     {
+        // Pastikan hanya Admin/BPDPKS yang bisa mengakses
+        if (!in_array(Auth::user()->role, ['admin', 'bpdpks'])) {
+            abort(403, 'Akses ditolak.');
+        }
+        
         $request->validate([
             'status' => ['required', Rule::in(['diterima', 'ditolak'])],
             'catatan_admin' => 'nullable|string',
@@ -124,6 +175,8 @@ class LowonganController extends Controller
             'status' => $request->status,
             'catatan_admin' => $request->catatan_admin,
         ]);
+        
+        // Opsional: Kirim notifikasi kepada mahasiswa yang bersangkutan
 
         return redirect()->back()->with('success', 'Status aplikasi berhasil diperbarui!');
     }

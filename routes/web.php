@@ -30,19 +30,42 @@ use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
 // BPDPKS Middleware
 use App\Http\Middleware\IsBpdpks; // <-- Pastikan ini sudah Anda buat!
 
+// ============================================
+// admin Controllers
+// ============================================
+use App\Http\Controllers\Admin\AdminDashboardController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminKampusController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminMahasiswaController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminMahasiswaAkademikController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminMahasiswaDokumenController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminNilaiController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\DataBeasiswaController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminMagangLowonganController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\PenelitianLombaController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminRegisUlangController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminFeedbackController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminKeuanganController; // <-- DITAMBAHKAN
+use App\Http\Controllers\Admin\AdminNotifikasiController; // <-- DITAMBAHKAN
+use App\Http\Middleware\AdminMiddleware;
+
+
 
 // ============================================
 // 1. ROOT & AUTH ROUTES
 // ============================================
+
 
 Route::get('/', function () {
     if (Auth::check()) {
         // Logika redirect berdasarkan role
         $role = Auth::user()->role;
         if ($role == 'mahasiswa') {
-            return redirect()->route('dashboard'); // Default ke dashboard Mahasiswa
+            return redirect()->route('dashboard'); // Default ke dashboard Mahasiswa (URL: /dashboard)
         } elseif ($role == 'bpdpks') {
-            return redirect()->route('bpdpks.dashboard');
+            return redirect()->route('bpdpks.dashboard'); // URL: /bpdpks/dashboard
+        }
+        elseif ($role == 'admin') {
+            return redirect()->route('admin.dashboard'); // URL: /admin/dashboard (setelah perbaikan)
         }
     }
     return redirect()->route('login');
@@ -65,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Default Dashboard (Akan diakses oleh Mahasiswa)
+    // URL: /dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // ---
@@ -150,7 +174,8 @@ Route::middleware(['auth'])->group(function () {
     // ---
     // ROUTES BPDPKS
     // ---
-    Route::middleware([IsBpdpks::class])->prefix('bpdpks')->name('bpdpks.')->group(function () {
+    // Menggunakan alias string jika sudah didaftarkan di bootstrap/app.php
+    Route::middleware(['bpdpks'])->prefix('bpdpks')->name('bpdpks.')->group(function () {
 
         // Dashboard
         Route::get('/dashboard', [DataMahasiswaController::class, 'dashboard'])->name('dashboard'); 
@@ -177,48 +202,90 @@ Route::middleware(['auth'])->group(function () {
 
 }); // END: Grup Middleware AUTH
 
+
+// ============================================
+    // ROUTES KHUSUS ADMIN (FULL CONTROL)
     // ============================================
-    // // ROUTES KHUSUS ADMIN (FULL CONTROL)
-    // // ============================================
-    // Route::middleware([AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+    // Menggunakan alias string jika sudah didaftarkan di bootstrap/app.php
+    Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         
-    //     // 1. Dashboard Admin
-    //     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        // 1. Dashboard Admin
+        // PERBAIKAN UTAMA: Mengubah rute '/' menjadi '/dashboard' agar URL menjadi /admin/dashboard
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // Redirect: Agar akses /admin tetap mengarah ke /admin/dashboard
+        Route::redirect('/', 'dashboard'); 
 
-    //     // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
-    //     Route::resource('kampus', AdminKampusController::class);
+        // Rute Logout Admin harus menggunakan AuthController::logout yang sudah didefinisikan di grup 'auth'
+        // Jika perlu rute logout terpisah, pastikan AdminDashboardController memiliki method logout.
+        // Jika tidak, hapus rute ini dan gunakan rute logout umum di atas. 
+        // Saya asumsikan Anda ingin menggunakan rute logout umum, jadi saya hapus rute logout di sini.
+        // Route::post('/logout', [AdminDashboardController::class, 'logout'])->name('logout'); // <-- DIHAPUS
+
+        // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
+        Route::resource('kampus', AdminKampusController::class);
         
-    //     // 3. Manajemen Mahasiswa & Akademik
-    //     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-    //         // Daftar Mahasiswa (CRUD data diri dasar)
-    //         Route::resource('/', AdminMahasiswaController::class)->except(['show']); 
+        // 3. Manajemen Mahasiswa & Akademik
+        Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+            // Daftar Mahasiswa (CRUD data diri dasar)
+            Route::resource('data', AdminMahasiswaController::class)->except(['show']); // Mengubah '/' menjadi 'data' untuk menghindari konflik rute
             
-    //         // Data Akademik / Nilai (Mass Upload & OLAP Report) 
-    //         Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
-    //         Route::post('nilai/upload', [AdminNilaiController::class, 'massUpload'])->name('nilai.mass_upload'); 
-    //         Route::get('nilai/report', [AdminNilaiController::class, 'reportOlap'])->name('nilai.olap'); 
-    //     });
+            // Data Akademik / Nilai (Mass Upload & Manual Input) - Menggunakan AdminMahasiswaAkademikController
+            Route::prefix('akademik')->name('akademik.')->group(function () {
+                // Tampilkan daftar nilai akademik seluruh mahasiswa
+                Route::get('/', [AdminMahasiswaAkademikController::class, 'index'])->name('index'); 
+                // Tampilkan form edit (Perbaikan di sini)
+                Route::get('{mahasiswaDetail}/edit', [AdminMahasiswaAkademikController::class, 'edit'])->name('edit'); // <-- DITAMBAHKAN
+                // Manual Input/Update Nilai (IPS/IPK)
+                // Menggunakan ID MahasiswaDetail untuk create (MahasiswaDetail \$mahasiswaDetail)
+                Route::get('create/{mahasiswaDetail}', [AdminMahasiswaAkademikController::class, 'create'])->name('create');
+                Route::post('store', [AdminMahasiswaAkademikController::class, 'store'])->name('store');
+                // Proses update data (Perbaikan di sini)
+                Route::put('{mahasiswaDetail}', [AdminMahasiswaAkademikController::class, 'update'])->name('update'); // <-- DITAMBAHKAN
+                // Mass Upload (Import)
+                Route::get('import', [AdminMahasiswaAkademikController::class, 'showImportForm'])->name('import.form');
+                Route::post('import', [AdminMahasiswaAkademikController::class, 'import'])->name('import.process'); 
+            });
 
-    //     // 4. Manajemen Program Beasiswa & Pengumuman
-    //     Route::resource('beasiswa', AdminBeasiswaController::class); 
+            // Manajemen Dokumen Mahasiswa (Verifikasi) - Menggunakan AdminMahasiswaDokumenController
+            Route::prefix('dokumen')->name('dokumen.')->group(function () {
+                Route::get('/', [AdminMahasiswaDokumenController::class, 'index'])->name('index');
+                Route::get('{mahasiswaDetail}', [AdminMahasiswaDokumenController::class, 'show'])->name('show');
+                Route::post('{mahasiswaDetail}/verifikasi', [AdminMahasiswaDokumenController::class, 'verifikasi'])->name('verifikasi'); 
+            });
+
+
+            // Data Akademik / Nilai (Mass Upload & OLAP Report) - Rute lama, dipertahankan jika Controller AdminNilaiController masih relevan
+            Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
+            Route::post('nilai/upload', [AdminNilaiController::class, 'massUpload'])->name('nilai.mass_upload'); 
+            Route::get('nilai/report', [AdminNilaiController::class, 'reportOlap'])->name('nilai.olap'); 
+        });
+
+        // 4. Manajemen Program Beasiswa & Pengumuman - Menggunakan DataBeasiswaController
+        // Catatan: Mengganti AdminBeasiswaController dengan DataBeasiswaController
+        Route::resource('beasiswa', DataBeasiswaController::class); 
         
-    //     // 5. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
-    //     Route::resource('lowongan', AdminMagangLowonganController::class); 
-    //     Route::resource('penelitian-lomba', AdminPenelitianLombaController::class); 
-
-    //     // 6. Manajemen Registrasi Ulang & Feedback (Sistem Hard Gate) [Image of User Registration Flowchart with Approval Step]
-    //     Route::prefix('regis-ulang')->name('regis-ulang.')->group(function () {
-    //         // Review dan Approval Registrasi Ulang
-    //         Route::get('/', [AdminRegisUlangController::class, 'index'])->name('index');
-    //         Route::post('{regis_ulang_id}/approve', [AdminRegisUlangController::class, 'approve'])->name('approve');
-    //         Route::post('{regis_ulang_id}/reject', [AdminRegisUlangController::class, 'reject'])->name('reject');
+        // 5. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
+        Route::resource('lowongan', AdminMagangLowonganController::class); // Rute untuk Lowongan
+        Route::resource('penelitian-lomba', PenelitianLombaController::class); // Rute untuk Penelitian/Lomba
+        
+        // 6. Manajemen Registrasi Ulang & Feedback
+        Route::prefix('regis-ulang')->name('regis-ulang.')->group(function () {
+            // Review dan Approval Registrasi Ulang
+            Route::get('/', [AdminRegisUlangController::class, 'index'])->name('index');
+            Route::post('{regis_ulang_id}/approve', [AdminRegisUlangController::class, 'approve'])->name('approve');
+            Route::post('{regis_ulang_id}/reject', [AdminRegisUlangController::class, 'reject'])->name('reject');
             
-    //         // Melihat semua feedback (Kritik dan Saran)
-    //         Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback');
-    //     });
+            // Melihat semua feedback (Kritik dan Saran)
+            Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback');
+        });
 
-    //     // 7. Keuangan (Akses Penuh/Audit untuk Admin)
-    //     Route::resource('keuangan', AdminKeuanganController::class)->except(['create']); 
-    //     Route::post('keuangan/{id}/transfer', [AdminKeuanganController::class, 'markAsTransferred'])->name('keuangan.transfer'); 
-    // });
-    // // END: Grup Prefix Admin
+        // 7. Keuangan (Akses Penuh/Audit untuk Admin)
+        Route::resource('keuangan', AdminKeuanganController::class)->except(['create']); 
+        Route::post('keuangan/{id}/transfer', [AdminKeuanganController::class, 'markAsTransferred'])->name('keuangan.transfer'); 
+        
+        // 8. Notifikasi dan Pengumuman - Menggunakan AdminNotifikasiController
+        Route::resource('notifikasi-pengumuman', AdminNotifikasiController::class)->names('notifikasi'); 
+
+    });
+    // END: Grup Prefix Admin
