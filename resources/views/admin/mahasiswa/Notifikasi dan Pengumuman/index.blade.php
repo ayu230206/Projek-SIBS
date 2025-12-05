@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="card shadow-lg">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center d-flex mb-4 fw-bold text-dark">
         <h4 class="mb-0">Daftar Pengumuman ke Mahasiswa</h4>
         <a href="{{ route('admin.notifikasi.create') }}" class="btn btn-primary">
             <i class="fas fa-paper-plane me-1"></i> Buat Pengumuman Baru

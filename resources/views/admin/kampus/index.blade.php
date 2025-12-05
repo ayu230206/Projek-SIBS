@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3><i class="fas fa-university me-2"></i>Daftar Kampus Mitra & MoU</h3>
+    <div class="d-flex justify-content-between align-items-center mb-4 fw-bold text-dark">
+        <h3><i class="fas fa-university me-2 fw-bold text-dark"></i>Daftar Kampus Mitra & MoU</h3>
         <a href="{{ route('admin.kampus.create') }}" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i> Tambah Kampus
         </a>

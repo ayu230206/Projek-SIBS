@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 fw-bold text-dark">
         <h2>Data Mahasiswa (Penerima Beasiswa)</h2>
     </div>
 

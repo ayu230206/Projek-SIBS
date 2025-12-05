@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="card shadow-lg">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center fw-bold text-dark">
         <h4 class="mb-0">Daftar Program Beasiswa</h4>
         <a href="{{ route('admin.beasiswa.create') }}" class="btn btn-primary">
             <i class="fas fa-plus me-1"></i> Tambah Program Baru

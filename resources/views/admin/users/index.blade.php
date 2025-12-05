@@ -3,8 +3,8 @@
 @section('title', 'Manajemen User')
 
 @section('content')
-<div class="container-fluid">
-    <h1><i class="fas fa-users-cog me-2"></i>Manajemen User</h1>
+<div class="container-fluid fw-bold text-dark">
+    <h1><i class="fas fa-users-cog me-2 fw-bold text-dark"></i>Manajemen User</h1>
     
     {{-- Notifikasi Khusus Password Baru (Hasil Auto Generate) --}}
     @if (session('credentials'))

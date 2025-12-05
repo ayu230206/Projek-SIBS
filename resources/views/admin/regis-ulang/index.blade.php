@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <h1><i class="fas fa-redo-alt me-2"></i>Permohonan Registrasi Ulang</h1>
+    <h1 class = "text-dark fw-bold"><i class="fas fa-redo-alt me-2 text-dark fw-bold"></i>Permohonan Registrasi Ulang</h1>
     <p class="text-muted">Daftar mahasiswa yang mengajukan Registrasi Ulang (Wajib diisi setiap semester).</p>
 
     @if(session('success'))

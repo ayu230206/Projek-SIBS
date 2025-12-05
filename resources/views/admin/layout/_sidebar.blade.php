@@ -27,13 +27,6 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.dokumen.*') ? 'bg-secondary rounded' : '' }}" 
-                href="{{ route('admin.mahasiswa.dokumen.index') }}">
-                <i class="fas fa-file-contract me-2"></i> Verifikasi Dokumen
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a class="nav-link text-white {{ request()->routeIs('admin.users.*') ? 'bg-secondary rounded' : '' }}" 
                 href="{{ route('admin.users.index') }}">
                 <i class="fas fa-user-plus me-2"></i> Tambah Akun User

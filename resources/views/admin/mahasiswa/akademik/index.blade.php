@@ -1,7 +1,7 @@
 @extends('admin.layout.LayoutAdmin')
 
 @section('content')
-<div class="container">
+<div class="container fw-bold text-dark">
     <h3>Data Akademik Mahasiswa</h3>
     <div class="mb-3 text-end">
         {{-- Tombol dummy import --}}
