@@ -36,7 +36,6 @@ class MahasiswaSeeder extends Seeder
 $userId = DB::table('users')->insertGetId([
     'nama_lengkap' => $nama,
     'email' => 'mhs' . $i . '@test.com',
-    'username' => 'mhs' . $i, // tambahkan ini
     'password' => Hash::make('password'),
     'role' => 'mahasiswa',
     'asal_kampus' => $kampusId,

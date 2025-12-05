@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('path_kartu_mhs')->nullable();
             $table->string('path_transkrip_nilai')->nullable();
             $table->string('path_foto_formal')->nullable();
-            $table->decimal('ipk', 3, 2)->default(0.00);
+            $table->decimal('ipk', 4, 2)->nullable();
             $table->decimal('ips_terakhir', 3, 2)->default(0.00);
             $table->softDeletes();
             $table->timestamps();

@@ -16,7 +16,6 @@ class UserRoleSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@bpdpks.id'],  // cek email
             [
-                'username' => 'admin', // Tambahkan username
                 'nama_lengkap' => 'Super Admin Beasiswa',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
@@ -28,7 +27,6 @@ class UserRoleSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'naldi@bpdpks.id'],
             [
-                'username' => 'naldi', // Tambahkan username
                 'nama_lengkap' => 'Naldi BPDPKS',
                 'password' => Hash::make('password'),
                 'role' => 'bpdpks',
@@ -40,7 +38,6 @@ class UserRoleSeeder extends Seeder
         $mahasiswa = User::firstOrCreate(
             ['email' => 'mahasiswa@kampus.ac.id'],
             [
-                'username' => 'mahasiswa', // Tambahkan username
                 'nama_lengkap' => 'Fulan Mahasiswa',
                 'password' => Hash::make('password'),
                 'role' => 'mahasiswa',

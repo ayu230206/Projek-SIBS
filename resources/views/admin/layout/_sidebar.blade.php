@@ -20,23 +20,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.mahasiswa.data.*') ? 'bg-secondary rounded' : '' }}" 
-               href="{{ route('admin.mahasiswa.data.index') }}">
-                <i class="fas fa-user-graduate me-2"></i> Data Mahasiswa
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a class="nav-link text-white {{ request()->routeIs('admin.users.*') ? 'bg-secondary rounded' : '' }}" 
                 href="{{ route('admin.users.index') }}">
                 <i class="fas fa-user-plus me-2"></i> Tambah Akun User
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.mahasiswa.akademik.*') ? 'bg-secondary rounded' : '' }}" 
-               href="{{ route('admin.mahasiswa.akademik.index') }}">
-                <i class="fas fa-chart-line me-2"></i> Akademik (IPK/IPS)
             </a>
         </li>
 

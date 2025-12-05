@@ -17,7 +17,6 @@ class LowonganMagangSeeder extends Seeder
                 'lokasi' => 'Pekanbaru',
                 'tanggal_mulai' => '2025-01-10',
                 'tanggal_selesai' => '2025-04-10',
-                'deadline' => '2025-01-05', // WAJIB ADA
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -28,7 +27,6 @@ class LowonganMagangSeeder extends Seeder
                 'lokasi' => 'Jakarta',
                 'tanggal_mulai' => '2025-02-01',
                 'tanggal_selesai' => '2025-05-01',
-                'deadline' => '2025-01-25',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -39,7 +37,6 @@ class LowonganMagangSeeder extends Seeder
                 'lokasi' => 'Bandung',
                 'tanggal_mulai' => '2025-03-01',
                 'tanggal_selesai' => '2025-06-01',
-                'deadline' => '2025-02-20',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

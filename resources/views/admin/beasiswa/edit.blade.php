@@ -1,58 +1,85 @@
 @extends('admin.layout.LayoutAdmin')
 
-@section('title', 'Edit Program Beasiswa: ' . $program->judul)
+@section('title', 'Edit Program Beasiswa')
 
 @section('content')
-
-<div class="card shadow-lg mx-auto" style="max-width: 800px;">
-<div class="card-header bg-warning text-dark">
-<h5 class="mb-0">Edit Program Beasiswa</h5>
-</div>
-<div class="card-body">
-<form action="{{ route('admin.beasiswa.update', $program->id) }}" method="POST">
-@csrf
-@method('PUT')
-
-        <div class="mb-3">
-            <label for="judul" class="form-label">Judul Program</label>
-            <input type="text" class="form-control @error('judul') is-invalid @enderror" id="judul" name="judul" value="{{ old('judul', $program->judul) }}" required>
-            @error('judul')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+    <div class="header">
+        <div class="title-section">
+            <h1 class="welcome"><i class="fas fa-edit me-2"></i> Edit Program Beasiswa</h1>
+            <p class="subtle">Perbarui informasi untuk program: <strong>{{ $program->judul }}</strong></p>
         </div>
-
-        <div class="mb-3">
-            <label for="isi_informasi" class="form-label">Detail Informasi Program</label>
-            <textarea class="form-control @error('isi_informasi') is-invalid @enderror" id="isi_informasi" name="isi_informasi" rows="5" required>{{ old('isi_informasi', $program->isi_informasi) }}</textarea>
-            @error('isi_informasi')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+        <div class="controls">
+            <a href="{{ route('admin.beasiswa.index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label for="tanggal_mulai" class="form-label">Tanggal Mulai Pendaftaran</label>
-                <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" value="{{ old('tanggal_mulai', $program->tanggal_mulai) }}">
-                @error('tanggal_mulai')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+    @if ($errors->any())
+        <div class="alert alert-danger shadow-sm rounded-3">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <div class="card-custom">
+        <form action="{{ route('admin.beasiswa.update', $program->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <h5 class="section-title text-primary mb-4">Informasi Dasar</h5>
+
+            <div class="mb-4">
+                <label for="judul" class="form-label fw-bold">Judul Program <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="fas fa-heading text-muted"></i></span>
+                    <input type="text" class="form-control form-control-lg @error('judul') is-invalid @enderror" 
+                           id="judul" name="judul" value="{{ old('judul', $program->judul) }}" required>
+                </div>
+                @error('judul')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="tanggal_berakhir" class="form-label">Tanggal Berakhir Pendaftaran</label>
-                <input type="date" class="form-control @error('tanggal_berakhir') is-invalid @enderror" id="tanggal_berakhir" name="tanggal_berakhir" value="{{ old('tanggal_berakhir', $program->tanggal_berakhir) }}">
-                @error('tanggal_berakhir')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label for="tanggal_mulai" class="form-label fw-bold">Tanggal Mulai Pendaftaran</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-calendar-check text-success"></i></span>
+                        <input type="date" class="form-control @error('tanggal_mulai') is-invalid @enderror" 
+                               id="tanggal_mulai" name="tanggal_mulai" value="{{ old('tanggal_mulai', $program->tanggal_mulai) }}">
+                    </div>
+                    @error('tanggal_mulai')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="tanggal_berakhir" class="form-label fw-bold">Tanggal Berakhir Pendaftaran</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="fas fa-calendar-times text-danger"></i></span>
+                        <input type="date" class="form-control @error('tanggal_berakhir') is-invalid @enderror" 
+                               id="tanggal_berakhir" name="tanggal_berakhir" value="{{ old('tanggal_berakhir', $program->tanggal_berakhir) }}">
+                    </div>
+                    @error('tanggal_berakhir')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                </div>
             </div>
-        </div>
 
-        <div class="d-flex justify-content-end mt-3">
-            <a href="{{ route('admin.beasiswa.index') }}" class="btn btn-secondary me-2">Batal</a>
-            <button type="submit" class="btn btn-primary">Perbarui Program</button>
-        </div>
-    </form>
-</div>
+            <h5 class="section-title text-primary mb-4 mt-5">Detail Lengkap</h5>
 
+            <div class="mb-4">
+                <label for="isi_informasi" class="form-label fw-bold">Deskripsi & Syarat <span class="text-danger">*</span></label>
+                <textarea class="form-control @error('isi_informasi') is-invalid @enderror" 
+                          id="isi_informasi" name="isi_informasi" rows="8" required>{{ old('isi_informasi', $program->isi_informasi) }}</textarea>
+                @error('isi_informasi')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+            </div>
 
-</div>
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ route('admin.beasiswa.index') }}" class="btn btn-light border px-4">Batal</a>
+                <button type="submit" class="btn btn-primary px-5" style="background-color: var(--palm-green); border-color: var(--palm-green);">
+                    <i class="fas fa-save me-2"></i> Perbarui Program
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// Asumsi Anda memiliki Model untuk Notifikasi yang bisa dilihat di dashboard
-use App\Models\Notifikasi; // Perlu dibuat Model Notifikasi dan Migrasinya
+// PERBAIKAN: Sesuaikan import dengan namespace yang ada di file Model Anda
+use App\Models\Admin\Pengumuman; 
 
-class NotifikasiController extends Controller
+class AdminNotifikasiController extends Controller
 {
     /**
      * Tampilkan daftar Notifikasi/Pengumuman yang sudah dikirim.
@@ -16,6 +16,8 @@ class NotifikasiController extends Controller
     public function index()
     {
         $notifikasis = Notifikasi::latest()->paginate(10);
+        // Pastikan path view ini benar sesuai struktur folder resources/views Anda
+        // Jika folder viewnya "admin/notifikasi/index.blade.php", ubah path di bawah
         return view('admin.mahasiswa.Notifikasi dan Pengumuman.index', compact('notifikasis'));
     }
 
@@ -37,17 +39,16 @@ class NotifikasiController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'isi_pesan' => 'required|string',
-            'jenis' => 'required|in:umum,pencairan,registrasi_ulang', // Contoh jenis notifikasi
+            'jenis' => 'required|in:umum,pencairan,registrasi_ulang',
         ]);
 
         // Simpan ke database
         $notifikasi = Notifikasi::create(array_merge($request->all(), [
             'user_id_pengirim' => auth()->id(), // Admin yang mengirim
+            // Default role penerima jika tidak ada di form
+            'role_penerima' => 'mahasiswa', 
         ]));
         
-        // TODO: Logika untuk mengirim notifikasi ke Mahasiswa (misalnya melalui Broadcast atau Job Queue)
-        // KirimNotifikasiToMahasiswaJob::dispatch($notifikasi); 
-
         return redirect()->route('admin.notifikasi.index')->with('success', 'Pengumuman berhasil dibuat dan dikirim ke dashboard Mahasiswa.');
     }
 

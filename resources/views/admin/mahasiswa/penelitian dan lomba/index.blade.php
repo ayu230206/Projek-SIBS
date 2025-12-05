@@ -3,81 +3,87 @@
 @section('title', 'Daftar Penelitian dan Lomba')
 
 @section('content')
-
-<div class="container-fluid">
-<!-- Header -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-<h1 class="h3 mb-0 text-gray-800">Daftar Program Penelitian dan Lomba</h1>
-<a href="{{ route('admin.penelitian-lomba.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-<i class="fas fa-plus fa-sm text-white-50"></i> Tambah Program Baru
-</a>
-</div>
-
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="header">
+        <div class="title-section">
+            <h1 class="welcome"><i class="fas fa-trophy me-2"></i> Penelitian & Lomba</h1>
+            <p class="subtle">Kelola informasi kompetisi akademik dan riset sawit.</p>
+        </div>
+        <div class="controls mb-4">
+            <a href="{{ route('admin.penelitian-lomba.create') }}" class="btn btn-primary shadow-sm" style="background-color: var(--palm-green); border-color: var(--palm-green);">
+                <i class="fas fa-plus me-1"></i> Tambah Kegiatan
+            </a>
+        </div>
     </div>
-@endif
 
-<!-- Data Table -->
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Data Program Penelitian dan Lomba</h6>
-    </div>
-    <div class="card-body">
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-2 fs-4"></i>
+                <div>{{ session('success') }}</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="card-custom">
+        <h5 class="section-title"><i class="fas fa-list me-2"></i> Daftar Kegiatan</h5>
+        
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
                     <tr>
-                        <th>#</th>
-                        <th>Judul Program</th>
+                        <th class="text-center" width="5%">No</th>
+                        <th>Kategori</th>
+                        <th width="25%">Judul Kegiatan</th>
+                        <th>Penyelenggara</th>
                         <th>Deskripsi Singkat</th>
-                        <th>Periode Pendaftaran</th>
-                        <th>Aksi</th>
+                        <th width="15%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Contoh loop data. Pastikan nama variabel sesuai dengan yang dikirim dari controller --}}
                     @forelse ($dataPenelitianLomba as $program)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $program->judul }}</td>
-                        <td>{{ Str::limit($program->deskripsi, 80) }}</td>
-                        <td>{{ \Carbon\Carbon::parse($program->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($program->tanggal_berakhir)->format('d M Y') }}</td>
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td>
-                            <a href="{{ route('admin.penelitian-lomba.edit', $program->id) }}" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <form action="{{ route('admin.penelitian-lomba.destroy', $program->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus program ini?')">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </form>
+                            @if($program->tipe == 'lomba')
+                                <span class="badge bg-warning text-dark"><i class="fas fa-medal me-1"></i> Lomba</span>
+                            @else
+                                <span class="badge bg-info text-dark"><i class="fas fa-microscope me-1"></i> Penelitian</span>
+                            @endif
+                        </td>
+                        <td><span class="fw-bold text-dark">{{ $program->judul }}</span></td>
+                        <td>{{ $program->penyelenggara ?? '-' }}</td>
+                        <td>{{ Str::limit($program->deskripsi, 60) }}</td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="{{ route('admin.penelitian-lomba.edit', $program->id) }}" class="btn btn-sm btn-warning text-white" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.penelitian-lomba.destroy', $program->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center">Tidak ada data Program Penelitian dan Lomba.</td>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="fas fa-clipboard-list fa-3x mb-3 text-secondary"></i><br>
+                            Tidak ada data Program Penelitian dan Lomba.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        
+        {{-- Pagination jika ada --}}
+        <div class="mt-4">
+            {{ $dataPenelitianLomba->links() }}
+        </div>
     </div>
-</div>
-
-
-</div>
-
-<script>
-// Hanya perlu jika Anda menggunakan library DataTables atau JS kustom
-document.addEventListener('DOMContentLoaded', function() {
-// Asumsi DataTables sudah dimuat
-// $('#dataTable').DataTable();
-});
-</script>
-
 @endsection
