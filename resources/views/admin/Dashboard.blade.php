@@ -123,12 +123,6 @@
                         </div>
                     @endif
                 </div>
-
-                <div class="mt-4 pt-4 border-t border-gray-100">
-                    <a href="{{ route('admin.notifikasi.index') }}" class="block w-full text-center py-2 text-sm font-semibold text-sawit-utama hover:text-green-700 hover:bg-green-50 rounded-lg transition">
-                        Lihat Semua Notifikasi
-                    </a>
-                </div>
             </div>
         </div>
     </div>
