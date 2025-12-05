@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Bpdpks;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 // Import Model yang sudah ada di namespace App\Models\Bpdpks\
-use App\Models\Bpdpks\Lowongan;
-use App\Models\Bpdpks\LowonganAplikasi;
+use App\Models\Admin\Lowongan;
+use App\Models\Admin\LowonganAplikasi;
 // Pastikan User Model diimport dari App\Models\
 use App\Models\User; 
 
@@ -20,8 +20,8 @@ class LowonganController extends Controller
     public function __construct()
     {
         // ASUMSI: Anda telah membuat Middleware untuk Role checking (misalnya, via Spatie Permissions atau custom middleware)
-        // $this->middleware('auth');
-        // $this->middleware('role:admin,bpdpks'); 
+        $this->middleware('auth');
+        $this->middleware('role:admin,bpdpks'); 
     }
 
     // --- CRUD LOWONGAN/MAGANG (ADMIN/BPDPKS VIEW) ---
@@ -54,7 +54,7 @@ class LowonganController extends Controller
 
         // 
 
-        return view('bpdpks.lowongan.index', compact('lowongans', 'tipe', 'search', 'pendingAplikasiCount'));
+        return view('admin.lowongan.index', compact('lowongans', 'tipe', 'search', 'pendingAplikasiCount'));
     }
 
     /**
@@ -62,7 +62,7 @@ class LowonganController extends Controller
      */
     public function create()
     {
-        return view('bpdpks.lowongan.create');
+        return view('admin.lowongan.create');
     }
 
     /**
@@ -87,7 +87,7 @@ class LowonganController extends Controller
             'deadline' => $request->deadline,
         ]);
 
-        return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil ditambahkan!');
+        return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil ditambahkan!');
     }
 
     /**
@@ -95,7 +95,7 @@ class LowonganController extends Controller
      */
     public function edit(Lowongan $lowongan)
     {
-        return view('bpdpks.lowongan.edit', compact('lowongan'));
+        return view('admin.lowongan.edit', compact('lowongan'));
     }
 
     /**
@@ -113,7 +113,7 @@ class LowonganController extends Controller
 
         $lowongan->update($request->only(['tipe', 'judul', 'deskripsi', 'kualifikasi', 'deadline']));
 
-        return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil diperbarui!');
+        return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil diperbarui!');
     }
 
     /**
@@ -123,7 +123,7 @@ class LowonganController extends Controller
     {
         // Tambahkan konfirmasi penghapusan (disarankan di sisi view/frontend)
         $lowongan->delete();
-        return redirect()->route('bpdpks.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil dihapus!');
+        return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil dihapus!');
     }
     
     // --- MONITORING APLIKASI OLEH ADMIN/BPDPKS ---
@@ -134,7 +134,7 @@ class LowonganController extends Controller
     public function monitoringAplikasi(Request $request, Lowongan $lowongan)
     {
         // Pastikan hanya Admin/BPDPKS yang bisa mengakses
-        if (!in_array(Auth::user()->role, ['admin', 'bpdpks'])) {
+        if (!in_array(Auth::user()->role, ['admin', 'admin'])) {
             abort(403, 'Akses ditolak.');
         }
 
@@ -152,7 +152,7 @@ class LowonganController extends Controller
 
         $aplikasis = $aplikasis->paginate(10)->withQueryString();
 
-        return view('bpdpks.lowongan.monitoring_aplikasi', compact('lowongan', 'aplikasis', 'status'));
+        return view('admin.lowongan.monitoring_aplikasi', compact('lowongan', 'aplikasis', 'status'));
     }
 
     /**
@@ -161,7 +161,7 @@ class LowonganController extends Controller
     public function prosesAplikasi(Request $request, LowonganAplikasi $aplikasidata)
     {
         // Pastikan hanya Admin/BPDPKS yang bisa mengakses
-        if (!in_array(Auth::user()->role, ['admin', 'bpdpks'])) {
+        if (!in_array(Auth::user()->role, ['admin', 'admin'])) {
             abort(403, 'Akses ditolak.');
         }
         

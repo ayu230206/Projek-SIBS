@@ -71,7 +71,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.lowongan.*') ? 'bg-secondary rounded' : '' }}" 
+            <a class="nav-link text-white {{ request()->routeIs('admin.lowongan.index') ? 'bg-secondary rounded' : '' }}" 
                href="{{ route('admin.lowongan.index') }}">
                 <i class="fas fa-briefcase me-2"></i> Lowongan & Magang
             </a>

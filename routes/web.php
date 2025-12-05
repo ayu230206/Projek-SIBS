@@ -3,13 +3,9 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminFeedbackController;
 use App\Http\Controllers\Admin\AdminKampusController;
-// ============================================
-// MAHASISWA Controllers
-// ============================================
 use App\Http\Controllers\Admin\AdminKeuanganController;
 use App\Http\Controllers\Admin\AdminMagangLowonganController;
 use App\Http\Controllers\Admin\AdminMahasiswaAkademikController;
-use App\Http\Controllers\Admin\AdminMahasiswaController;
 use App\Http\Controllers\Admin\AdminMahasiswaDokumenController;
 use App\Http\Controllers\Admin\AdminNilaiController;
 use App\Http\Controllers\Admin\AdminNotifikasiController;
@@ -17,36 +13,36 @@ use App\Http\Controllers\Admin\AdminRegisUlangController;
 use App\Http\Controllers\Admin\DataBeasiswaController;
 use App\Http\Controllers\Admin\PenelitianLombaController;
 use App\Http\Controllers\AuthController;
+// ============================================
+// BPDPKS Controllers (Imported via 'as BpdpksFeedbackController')
+// ============================================
 use App\Http\Controllers\Bpdpks\DataMahasiswaController;
 use App\Http\Controllers\Bpdpks\FeedbackController as BpdpksFeedbackController;
 use App\Http\Controllers\Admin\UserManagementController;
-// ============================================
-// BPDPKS Controllers
-// ============================================
 use App\Http\Controllers\Bpdpks\InfoKeuanganController;
 use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
 use App\Http\Controllers\Bpdpks\LowonganController;
+// ============================================
+// MAHASISWA Controllers (Imported via 'as MahasiswaFeedbackController' etc.)
+// ============================================
 use App\Http\Controllers\Mahasiswa\BankJudulProyekController;
-// BPDPKS Middleware
-use App\Http\Controllers\Mahasiswa\CommentController; // <-- Pastikan ini sudah Anda buat!
-// ============================================
-// admin Controllers
-// ============================================
-use App\Http\Controllers\Mahasiswa\DashboardController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\FeedbackController as MahasiswaFeedbackController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\LikeController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\LowonganKerjaController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\LowonganMagangController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\MagangController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\MahasiswaProfileController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\NotifikasiController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\PostController; // <-- DITAMBAHKAN
-use App\Http\Controllers\Mahasiswa\ProyekAkhirController; // <-- DITAMBAHKAN
-use App\Http\Middleware\IsBpdpks; // <-- DITAMBAHKAN
+use App\Http\Controllers\Mahasiswa\CommentController;
+use App\Http\Controllers\Mahasiswa\DashboardController;
+use App\Http\Controllers\Mahasiswa\FeedbackController as MahasiswaFeedbackController;
+use App\Http\Controllers\Mahasiswa\LikeController;
+use App\Http\Controllers\Mahasiswa\LowonganKerjaController;
+use App\Http\Controllers\Mahasiswa\LowonganMagangController;
+use App\Http\Controllers\Mahasiswa\MagangController;
+use App\Http\Controllers\Mahasiswa\MahasiswaAkademikController;
+use App\Http\Controllers\Mahasiswa\MahasiswaProfileController;
+use App\Http\Controllers\Mahasiswa\NotifikasiController;
+use App\Http\Controllers\Mahasiswa\PostController;
+use App\Http\Controllers\Mahasiswa\ProyekAkhirController;
+use App\Http\Middleware\IsBpdpks; // Tetap dipertahankan walau tidak digunakan di route BPDPKS
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDataMahasiswaController;
+
 // ============================================
 // 1. ROOT & AUTH ROUTES
 // ============================================
@@ -55,13 +51,15 @@ Route::get('/', function () {
     if (Auth::check()) {
         $role = Auth::user()->role;
         if ($role == 'mahasiswa') {
-            return redirect()->route('dashboard'); // Default ke dashboard Mahasiswa (URL: /dashboard)
+            // Redirect ke dashboard Mahasiswa (URL: /mahasiswa/dashboard)
+            return redirect()->route('mahasiswa.dashboard');
 
-            return redirect()->route('dashboard');
         } elseif ($role == 'bpdpks') {
-            return redirect()->route('bpdpks.dashboard'); // URL: /bpdpks/dashboard
+            // Redirect ke dashboard BPDPKS (URL: /bpdpks/dashboard)
+            return redirect()->route('bpdpks.dashboard');
         } elseif ($role == 'admin') {
-            return redirect()->route('admin.dashboard'); // URL: /admin/dashboard (setelah perbaikan)
+            // Redirect ke dashboard Admin (URL: /admin/dashboard)
+            return redirect()->route('admin.dashboard');
         }
     }
 
@@ -77,18 +75,16 @@ Route::middleware(['guest'])->group(function () {
 });
 
 // ============================================
-// 2. GRUP MIDDLEWARE AUTH
+// 2. GRUP MIDDLEWARE AUTH (Mahasiswa Default)
 // ============================================
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Default Dashboard (Akan diakses oleh Mahasiswa)
-    // URL: /dashboard
-    // Default Dashboard Mahasiswa
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     // --- ROUTES MAHASISWA ---
     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+        // Dashboard Mahasiswa (URL: /mahasiswa/dashboard)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
         // POSTS
         Route::resource('posts', PostController::class);
 
@@ -168,92 +164,97 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('notifikasi', [NotifikasiController::class, 'destroyAll'])->name('notifikasi.destroyAll');
     });
 
+    // Rute default /dashboard dialihkan ke /mahasiswa/dashboard, jika autentikasi berhasil
+    Route::redirect('/dashboard', '/mahasiswa/dashboard');
+
 }); // END: Grup Prefix Mahasiswa
 
-// ---
-// ROUTES BPDPKS
-// ---
+// ============================================
+// 3. ROUTES BPDPKS (Menggunakan satu blok yang benar)
+// ============================================
 // Menggunakan alias string jika sudah didaftarkan di bootstrap/app.php
-Route::middleware(['bpdpks'])->prefix('bpdpks')->name('bpdpks.')->group(function () {
+Route::middleware(['bpdpks'])
+    ->prefix('bpdpks')
+    ->name('bpdpks.')
+    ->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', [DataMahasiswaController::class, 'dashboard'])->name('dashboard');
-
-    // --- ROUTES BPDPKS ---
-    Route::middleware([IsBpdpks::class])->prefix('bpdpks')->name('bpdpks.')->group(function () {
+        // 1. Dashboard (URL: /bpdpks/dashboard, Name: bpdpks.dashboard)
         Route::get('/dashboard', [DataMahasiswaController::class, 'dashboard'])->name('dashboard');
 
+        // 2. Data Mahasiswa (URL: /bpdpks/data-mahasiswa, Name: bpdpks.datamahasiswa.index)
+        // Rute terpisah untuk index/list data mahasiswa agar resource di bawah tidak menimpanya
+        Route::get('/data-mahasiswa', [DataMahasiswaController::class, 'index'])->name('datamahasiswa.index');
+
+        // Route API untuk chart
         Route::get('/chart-data-api', [DataMahasiswaController::class, 'getChartDataApi'])->name('chartdata.api');
 
+        // Resource Keuangan, Kerjasama, Lowongan
         Route::resource('keuangan', InfoKeuanganController::class)->except(['show']);
         Route::resource('kerjasama', KampusKerjasamaController::class)->except(['show']);
         Route::resource('lowongan', LowonganController::class);
 
+        // Monitoring dan Proses Aplikasi Lowongan
         Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
         Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
 
-        Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['index', 'show']);
+        // Resource Data Mahasiswa (Hanya Show, karena Index sudah di atas)
+        // URL: /bpdpks/datamahasiswa/{datamahasiswa}, Name: bpdpks.datamahasiswa.show
+        Route::resource('datamahasiswa', DataMahasiswaController::class)->only(['show']);
 
+        // Resource Feedback
         Route::resource('feedback', BpdpksFeedbackController::class)->only(['index', 'show']);
     });
-});
+// END: Grup Prefix BPDPKS
 
 // ============================================
-// ROUTES KHUSUS ADMIN (FULL CONTROL)
+// 4. ROUTES KHUSUS ADMIN (FULL CONTROL)
 // ============================================
 // Menggunakan alias string jika sudah didaftarkan di bootstrap/app.php
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
-    
+
 
     // 1. Dashboard Admin
-    // PERBAIKAN UTAMA: Mengubah rute '/' menjadi '/dashboard' agar URL menjadi /admin/dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Redirect: Agar akses /admin tetap mengarah ke /admin/dashboard
     Route::redirect('/', 'dashboard');
 
     // Route Khusus Update Logo
-    Route::post('/update-logo', [App\Http\Controllers\Admin\AdminDashboardController::class, 'updateLogo'])->name('logo.update');
+    Route::post('/update-logo', [AdminDashboardController::class, 'updateLogo'])->name('logo.update');
     // Route untuk Membuka Halaman Pengaturan
     Route::get('/pengaturan', [AdminDashboardController::class, 'settings'])->name('settings');
 
-     // a. Route Khusus untuk Tambah Mahasiswa Otomatis (HARUS DI ATAS Resource 'users')
+    // 2. Manajemen User (Admin, BPDPKS, Tambah Mahasiswa Otomatis)
+    // a. Route Khusus untuk Tambah Mahasiswa Otomatis (HARUS DI ATAS Resource 'users')
     // URL: /admin/users/create-mahasiswa
     Route::get('/users/create-mahasiswa', [UserManagementController::class, 'createMahasiswa'])->name('users.create_mahasiswa');
     Route::post('/users/store-mahasiswa', [UserManagementController::class, 'storeMahasiswa'])->name('users.store_mahasiswa');
 
     // b. Route Resource Standar (List User, Create Admin, Edit, Delete)
-    // Otomatis membuat route bernama: admin.users.index, admin.users.store, dll.
     Route::resource('users', UserManagementController::class);
 
-    // Rute Logout Admin harus menggunakan AuthController::logout yang sudah didefinisikan di grup 'auth'
-    // Jika perlu rute logout terpisah, pastikan AdminDashboardController memiliki method logout.
-    // Jika tidak, hapus rute ini dan gunakan rute logout umum di atas.
-    // Saya asumsikan Anda ingin menggunakan rute logout umum, jadi saya hapus rute logout di sini.
-    // Route::post('/logout', [AdminDashboardController::class, 'logout'])->name('logout'); // <-- DIHAPUS
-
-    // 2. Manajemen Kampus (Admin memverifikasi dokumen MoU)
+    // 3. Manajemen Kampus (Admin memverifikasi dokumen MoU)
     Route::resource('kampus', AdminKampusController::class)->parameters([
-    'kampus' => 'kampus' // Memaksa nama parameter jadi {kampus}
-]);
+        'kampus' => 'kampus' // Memaksa nama parameter jadi {kampus}
+    ]);
 
-    // 3. Manajemen Mahasiswa & Akademik
+    // 4. Manajemen Mahasiswa & Akademik
     Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
         // Daftar Mahasiswa (CRUD data diri dasar)
-        Route::resource('data', AdminDataMahasiswaController::class); // Mengubah '/' menjadi 'data' untuk menghindari konflik rute
+        // URL: /admin/mahasiswa/data, Name: admin.mahasiswa.data.index, dll.
+        Route::resource('data', AdminDataMahasiswaController::class);
 
         // Data Akademik / Nilai (Mass Upload & Manual Input) - Menggunakan AdminMahasiswaAkademikController
         Route::prefix('akademik')->name('akademik.')->group(function () {
             // Tampilkan daftar nilai akademik seluruh mahasiswa
             Route::get('/', [AdminMahasiswaAkademikController::class, 'index'])->name('index');
-            // Tampilkan form edit (Perbaikan di sini)
-            Route::get('{mahasiswaDetail}/edit', [AdminMahasiswaAkademikController::class, 'edit'])->name('edit'); // <-- DITAMBAHKAN
+            // Tampilkan form edit
+            Route::get('{mahasiswaDetail}/edit', [AdminMahasiswaAkademikController::class, 'edit'])->name('edit');
             // Manual Input/Update Nilai (IPS/IPK)
-            // Menggunakan ID MahasiswaDetail untuk create (MahasiswaDetail \$mahasiswaDetail)
             Route::get('create/{mahasiswaDetail}', [AdminMahasiswaAkademikController::class, 'create'])->name('create');
             Route::post('store', [AdminMahasiswaAkademikController::class, 'store'])->name('store');
-            // Proses update data (Perbaikan di sini)
-            Route::put('{mahasiswaDetail}', [AdminMahasiswaAkademikController::class, 'update'])->name('update'); // <-- DITAMBAHKAN
+            // Proses update data
+            Route::put('{mahasiswaDetail}', [AdminMahasiswaAkademikController::class, 'update'])->name('update');
             // Mass Upload (Import)
             Route::get('import', [AdminMahasiswaAkademikController::class, 'showImportForm'])->name('import.form');
             Route::post('import', [AdminMahasiswaAkademikController::class, 'import'])->name('import.process');
@@ -266,21 +267,20 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
             Route::post('{mahasiswaDetail}/verifikasi', [AdminMahasiswaDokumenController::class, 'verifikasi'])->name('verifikasi');
         });
 
-        // Data Akademik / Nilai (Mass Upload & OLAP Report) - Rute lama, dipertahankan jika Controller AdminNilaiController masih relevan
+        // Data Akademik / Nilai (Rute lama, dipertahankan jika Controller AdminNilaiController masih relevan)
         Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
         Route::post('nilai/upload', [AdminNilaiController::class, 'massUpload'])->name('nilai.mass_upload');
         Route::get('nilai/report', [AdminNilaiController::class, 'reportOlap'])->name('nilai.olap');
     });
 
-    // 4. Manajemen Program Beasiswa & Pengumuman - Menggunakan DataBeasiswaController
-    // Catatan: Mengganti AdminBeasiswaController dengan DataBeasiswaController
+    // 5. Manajemen Program Beasiswa & Pengumuman - Menggunakan DataBeasiswaController
     Route::resource('beasiswa', DataBeasiswaController::class);
 
-    // 5. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
+    // 6. Manajemen Lowongan Magang/Kerja & Penelitian/Lomba
     Route::resource('lowongan', AdminMagangLowonganController::class); // Rute untuk Lowongan
     Route::resource('penelitian-lomba', PenelitianLombaController::class); // Rute untuk Penelitian/Lomba
 
-    // 6. Manajemen Registrasi Ulang & Feedback
+    // 7. Manajemen Registrasi Ulang & Feedback
     Route::prefix('regis-ulang')->name('regis-ulang.')->group(function () {
         // Review dan Approval Registrasi Ulang
         Route::get('/', [AdminRegisUlangController::class, 'index'])->name('index');
@@ -291,11 +291,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
         Route::get('feedback', [AdminFeedbackController::class, 'index'])->name('feedback');
     });
 
-    // 7. Keuangan (Akses Penuh/Audit untuk Admin)
+    // 8. Keuangan (Akses Penuh/Audit untuk Admin)
     Route::resource('keuangan', AdminKeuanganController::class)->except(['create']);
     Route::post('keuangan/{id}/transfer', [AdminKeuanganController::class, 'markAsTransferred'])->name('keuangan.transfer');
 
-    // 8. Notifikasi dan Pengumuman - Menggunakan AdminNotifikasiController
+    // 9. Notifikasi dan Pengumuman - Menggunakan AdminNotifikasiController
     Route::resource('notifikasi-pengumuman', AdminNotifikasiController::class)->names('notifikasi');
 
 });

@@ -10,27 +10,31 @@
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </a>
         </li>
-      <li class="sidebar-menu-item">
-    <a href="{{ route('bpdpks.keuangan.index') }}" class="sidebar-menu-link">
-        <i class="fas fa-wallet"></i> Informasi Keuangan
-    </a>
-</li>
-<li class="sidebar-menu-item">
- <a href="{{ route('bpdpks.kerjasama.index') }}" class="sidebar-menu-link">
- <i class="fas fa-university"></i> Kampus & Kerjasama
- </a>
-</li>
-<li class="sidebar-menu-item">
-    <a href="{{ route('bpdpks.lowongan.index') }}" class="sidebar-menu-link">
-        <i class="fas fa-bullhorn"></i> Lowongan Kerja (CRUD)
-    </a>
-</li>
-     <li class="sidebar-menu-item">
-    {{-- Ganti '#' dengan rute yang benar --}}
-    <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="sidebar-menu-link">
-        <i class="fas fa-user-graduate"></i> Data Mahasiswa (OLAP)
-    </a>
-</li>
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.keuangan.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-wallet"></i> Informasi Keuangan
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.kerjasama.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-university"></i> Kampus & Kerjasama
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.lowongan.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-bullhorn"></i> Lowongan Kerja (CRUD)
+            </a>
+        </li>
+            
+        <li class="sidebar-menu-item">
+            {{-- Ganti '#' dengan rute yang benar --}}
+            <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-user-graduate"></i> Data Mahasiswa (OLAP)
+            </a>
+        </li>
+
         <li class="sidebar-menu-item">
             <a href="#persetujuan" class="sidebar-menu-link">
                 <i class="fas fa-check-circle"></i> Persetujuan (Magang/Kampus)

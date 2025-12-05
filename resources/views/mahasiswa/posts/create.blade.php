@@ -35,7 +35,7 @@
                     <img id="preview" class="hidden w-64 h-64 object-cover rounded-xl border-2 border-green-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 </div>
                 <div class="flex justify-end gap-4">
-                    <a href="{{ route('dashboard') }}" class="px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    <a href="{{ route('mahasiswa.dashboard') }}" class="px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>

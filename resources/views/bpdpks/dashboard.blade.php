@@ -73,7 +73,7 @@
             
             <p class="subtle mt-2 mb-4">
                 Analisis visual data IPK. Untuk melihat **daftar lengkap data diri dan performa akademik mahasiswa**,
-                silakan klik: <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="btn btn-sm btn-outline-primary ms-2">
+                silakan klik: <a href="{{ route ('bpdpks.datamahasiswa.index') }}" class="btn btn-sm btn-outline-primary ms-2">
                     <i class="fas fa-arrow-right me-1"></i> Data Mahasiswa Penerima
                 </a>
             </p>
