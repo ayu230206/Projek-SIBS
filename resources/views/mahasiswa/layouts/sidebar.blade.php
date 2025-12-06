@@ -40,7 +40,7 @@
             <span class="font-medium">Proyek Akhir</span>
         </a>
 
-        <a href="{{ route('mahasiswa.magang.dashboard') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
+        <a href="{{ route('mahasiswa.magang.lowongan') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <svg class="w-6 h-6 mr-3 group-hover:text-green-200 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4"></path>
             </svg>
@@ -53,18 +53,13 @@
             </svg>
             <span class="font-medium">Lowongan Kerja</span>
         </a>
-        <a href="#" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
-            <svg class="w-6 h-6 mr-3 group-hover:text-green-200 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z"></path>
-            </svg>
-            <span class="font-medium">Feedback</span>
-        </a>
+    
 
         <a href="{{ route('mahasiswa.feedback.index') }}" class="flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <svg class="w-6 h-6 mr-3 group-hover:text-green-200 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h10M7 16h10M9 4h6a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z"></path>
             </svg>
-            <span class="font-medium">Isi Feedback</span>
+            <span class="font-medium">Feedback</span>
         </a>
         <a href="{{ route('mahasiswa.notifikasi') }}" class="relative flex items-center px-4 py-3 rounded-xl hover:bg-green-700/80 hover:shadow-lg transition-all">
             <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

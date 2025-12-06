@@ -14,7 +14,7 @@
         </div>
 
         <!-- Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <!-- IPK Terakhir Card -->
             <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 min-h-[280px] flex flex-col justify-between">
                 <div class="flex items-center mb-4">
@@ -46,7 +46,6 @@
 
                 <p class="text-gray-600 mb-4">Lihat status pengajuan magang Anda.</p>
 
-    
             </a>
 
             <!-- Lomba Card -->

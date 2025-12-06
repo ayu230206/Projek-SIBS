@@ -14,7 +14,7 @@ class MagangController extends Controller
     public function index()
     {
         $magangs = Magang::where('user_id', Auth::id())->get();
-        return view('mahasiswa.magang.index', compact('magangs'));
+        return view('mahasiswa.magang.riwayat', compact('magangs'));
     }
 
     public function store(Request $request)

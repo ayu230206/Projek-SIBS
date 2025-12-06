@@ -1,5 +1,5 @@
 <header class="bg-gradient-to-r from-green-900 to-green-800 text-white px-8 py-5 shadow-2xl flex justify-between items-center backdrop-blur-sm border-b border-green-700/50">
-    <h1 class="text-3xl font-extrabold tracking-wide">Dashboard Mahasiswa</h1>
+    <h1 class="text-3xl font-extrabold tracking-wide">Sistem Informasi Beasiswa Sawit</h1>
     <div class="flex items-center gap-6">
         <span class="hidden md:block text-lg font-medium">{{ Auth::user()->nama_lengkap ?? 'Mahasiswa' }}</span>
         <img src="{{ Auth::user()->foto_profile ? asset('storage/'.Auth::user()->foto_profile) : asset('images/default-avatar.png') }}"
