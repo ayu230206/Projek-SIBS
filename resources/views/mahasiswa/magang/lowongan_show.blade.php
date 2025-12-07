@@ -3,7 +3,7 @@
 
 @section('content')
 
-<div class="bg-green-50 w-full py-8 px-4 sm:px-6 lg:px-8 flex justify-center">
+<div class="min-h-screen bg-green-50 w-full py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
     
     <div class="bg-white shadow-2xl rounded-xl overflow-hidden p-8 max-w-3xl w-full">
         <div class="flex flex-col md:flex-row justify-between items-start border-b pb-4 mb-6">

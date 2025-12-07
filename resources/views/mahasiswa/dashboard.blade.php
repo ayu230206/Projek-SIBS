@@ -34,12 +34,10 @@
                     <p class="text-gray-600">Pantau nilai Indeks Prestasi Kumulatif Anda.</p>
                 </div>
 
-                {{-- NILAI IPK DINAMIS --}}
                 <div class="text-3xl font-bold text-blue-600 mt-4">
-                    {{ $akademik?->ipk ?? '-' }}
+                    {{ $akademik?->ipk ?? '' }}
                 </div>
 
-                {{-- TOMBOL LIHAT DETAIL IPK --}}
                 <a href="{{ route('mahasiswa.akademik.ipk') }}"
                     class="mt-4 text-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition">
                     Lihat IPK
@@ -47,9 +45,9 @@
             </div>
 
 
-            <!-- Magang Card -->
-            <a href="{{ route('mahasiswa.magang.index') }}"
-                class="block bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all min-h-[260px] flex flex-col justify-between">
+            <!-- ✅ MAGANG CARD (DITAMBAH BUTTON LIHAT PENGAJUAN) -->
+            <div
+                class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all min-h-[260px] flex flex-col justify-between">
 
                 <div>
                     <div class="flex items-center mb-4">
@@ -62,11 +60,20 @@
                         </div>
                         <h2 class="text-2xl font-bold text-gray-800 ml-4">Pengajuan Magang</h2>
                     </div>
+
                     <p class="text-gray-600">
                         Lihat status pengajuan magang Anda.
                     </p>
                 </div>
-            </a>
+
+                <!-- ✅ BUTTON LIHAT PENGAJUAN -->
+                <a href="{{ route('mahasiswa.magang.index') }}"
+                    class="mt-4 w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-xl transition-all duration-300 shadow-md">
+                    Lihat Pengajuan
+                </a>
+
+            </div>
+
 
             <!-- LOMBA Card -->
             <a href="{{ route('mahasiswa.info-lomba') }}"
@@ -95,23 +102,34 @@
                 </button>
             </a>
 
-            <!-- Kolaborasi Card -->
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all min-h-[260px] flex flex-col justify-between">
+            <!-- Penelitian Card -->
+            <a href="{{ route('mahasiswa.penelitian') }}"
+                class="block bg-white p-8 rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all min-h-[260px] flex flex-col justify-between">
+
                 <div>
                     <div class="flex items-center mb-4">
                         <div class="bg-teal-100 p-3 rounded-full">
-                            <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857" />
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-gray-800 ml-4">Info Kolaborasi</h2>
+                        <h2 class="text-2xl font-bold text-gray-800 ml-4">Penelitian dan Riset</h2>
                     </div>
 
-                    <p class="text-gray-600">Belum tersedia.</p>
+                    <p class="text-gray-600 mb-6">
+                        Temukan berbagai penelitian terbaru yang dapat Anda ikuti.
+                    </p>
+
+                    <div class="mt-auto">
+                        <button
+                            class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 shadow-md">
+                            Lihat Penelitian
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </a>
+
 
         </div>
     </div>

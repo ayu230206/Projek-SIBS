@@ -73,7 +73,7 @@
 
                     <div class="flex justify-between items-center mt-4">
                         <a href="{{ route('mahasiswa.magang.lowongan.show', $item->id) }}" class="text-blue-600 hover:text-blue-800 font-semibold transition">
-                            Lihat Detail &rarr;
+                            Lihat Detail
                         </a>
 
                         @if($isApplied)

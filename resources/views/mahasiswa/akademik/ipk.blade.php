@@ -18,7 +18,7 @@
             <div>
                 <p class="text-gray-500 text-sm">Nama</p>
                 <p class="font-semibold text-lg">
-                    {{ $mahasiswa->user->name ?? '-' }}
+                    {{ $mahasiswa->user->nama_lengkap ?? '-' }}
                 </p>
             </div>
 
@@ -44,8 +44,8 @@
             </div>
         </div>
 
-        <!-- NILAI -->
-        <div class="grid md:grid-cols-2 gap-6">
+        <!-- NILAI (IPS dihapus) -->
+        <div class="grid md:grid-cols-1 gap-6">
 
             <!-- IPK -->
             <div class="bg-blue-50 rounded-2xl p-6 text-center">
@@ -58,20 +58,11 @@
                     {!! $mahasiswa->ipk_badge !!}
                 </div>
             </div>
-
-            <!-- IPS -->
-            <div class="bg-green-50 rounded-2xl p-6 text-center">
-                <p class="text-gray-600">IPS Terakhir</p>
-                <h2 class="text-4xl font-extrabold text-green-600 mt-2">
-                    {{ $mahasiswa->ips_terakhir ?? '0.00' }}
-                </h2>
-            </div>
-
         </div>
 
         <!-- Tombol Kembali -->
         <div class="mt-8 text-center">
-            <a href="{{ route('mahasiswa.dashboard') }}"
+            <a href="{{ route('mahasiswa.akademik.dashboard') }}"
                class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-xl transition">
                 Kembali ke Dashboard
             </a>

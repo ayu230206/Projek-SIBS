@@ -13,7 +13,7 @@ class MahasiswaDetail extends Model
 
     // Kolom fillable sesuai dengan migrasi mahasiswa_detail Anda
     protected $fillable = [
-        'user_id', 'nim', 'kampus_id', 'program_studi', 'lama_studi', 
+        'user_id','nama','nim', 'kampus_id', 'program_studi', 'lama_studi', 
         'telepon', 'alamat_domisili', 'path_ktp', 'path_kartu_mhs', 
         'path_transkrip_nilai', 'path_foto_formal', 'ipk', 'ips_terakhir'
     ];

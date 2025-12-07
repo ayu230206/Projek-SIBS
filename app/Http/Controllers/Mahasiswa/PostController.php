@@ -103,7 +103,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         if ($post->user_id != Auth::id()) {
-            return redirect()->route('mahasiswa.posts.index')->with('error', 'Tidak punya akses');
+            return redirect()->route('mahasiswa.profil.index')->with('error', 'Tidak punya akses');
         }
 
         if ($post->gambar) {
@@ -112,7 +112,7 @@ class PostController extends Controller
 
         $post->delete();
 
-        return redirect()->route('mahasiswa.posts.index')->with('success', 'Post berhasil dihapus!');
+        return redirect()->route('mahasiswa.profil.index')->with('success', 'Post berhasil dihapus!');
     }
 
     // --- 8. LIKE / UNLIKE (AJAX Toggle) ---

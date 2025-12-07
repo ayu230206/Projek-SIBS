@@ -39,6 +39,7 @@ use App\Http\Controllers\Mahasiswa\MahasiswaProfileController;
 use App\Http\Controllers\Mahasiswa\NotifikasiController;
 use App\Http\Controllers\Mahasiswa\PostController;
 use App\Http\Controllers\Mahasiswa\ProyekAkhirController;
+use App\Http\Controllers\Mahasiswa\PenelitianController;
 use App\Http\Middleware\IsBpdpks; // Tetap dipertahankan walau tidak digunakan di route BPDPKS
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -169,9 +170,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('notifikasi', [NotifikasiController::class, 'destroyAll'])->name('notifikasi.destroyAll');
     });
 
-    //info lomba
+    //info lomba dan penelitian
     Route::prefix('mahasiswa')->middleware(['auth'])->group(function () {
     Route::get('/info-lomba', [InfoLombaController::class, 'index'])->name('mahasiswa.info-lomba');
+    Route::get('/penelitian', [PenelitianController::class, 'index'])
+        ->name('mahasiswa.penelitian');
     });    
 
     // Rute default /dashboard dialihkan ke /mahasiswa/dashboard, jika autentikasi berhasil
