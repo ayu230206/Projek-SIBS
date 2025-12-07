@@ -92,7 +92,7 @@
                     </div>
 
                     <p class="text-gray-600">
-                        Lihat informasi lomba terbaru.
+                        Lihat informasi lomba.
                     </p>
                 </div>
 
