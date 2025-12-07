@@ -5,7 +5,7 @@ namespace App\Models\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notifikasi extends Model
+class Pengumuman extends Model
 {
     use HasFactory;
 

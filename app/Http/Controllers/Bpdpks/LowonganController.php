@@ -141,8 +141,9 @@ class LowonganController extends Controller
         $status = $request->get('status', 'semua');
 
         $aplikasis = $lowongan->aplikasi()->with(['mahasiswa' => function ($query) {
-            // Load detail mahasiswa (NIM, Kampus, Prodi)
-            $query->with('detailMahasiswa.kampus'); 
+            // PERBAIKAN: Mengganti 'detailMahasiswa' menjadi 'detail' 
+            // karena di model User relasi tersebut bernama detail().
+            $query->with('detail.kampus'); 
         }])
             ->orderBy('created_at', 'desc');
 

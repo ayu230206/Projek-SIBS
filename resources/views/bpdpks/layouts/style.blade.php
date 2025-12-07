@@ -10,6 +10,8 @@
     --background-light: #f4f7f6; /* Background Sangat Terang */
     --card-background: #ffffff; /* Background Kartu */
     --sidebar-width: 250px; /* Lebar Sidebar yang Konsisten */
+    --logout-red: #e74a3b; /* Merah untuk Logout */
+    --logout-hover: #cc0000; /* Merah Lebih Tua untuk Hover */
 }
 
 /* Global Reset & Body: DIKOREKSI: Menghapus display: flex dari body */
@@ -24,7 +26,7 @@ body {
 }
 
 /* ========================================================= */
-/* 2. SIDEBAR STYLES (Tidak ada perubahan) */
+/* 2. SIDEBAR STYLES */
 /* ========================================================= */
 .sidebar {
     height: 100vh;
@@ -40,7 +42,7 @@ body {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
-/* (Styles Sidebar Lainnya Tetap) */
+
 .sidebar-header {
     padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -87,142 +89,120 @@ body {
     min-width: 20px;
     text-align: center;
 }
+
+/* --- UPDATED: Sidebar Footer & Logout Button Merah dari awal --- */
 .sidebar-footer {
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
 }
-.sidebar-footer .user-info {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.85rem;
-}
-.sidebar-footer a {
-    color: var(--accent-light);
+
+.logout-button {
+    display: block;
+    padding: 10px 15px;
+    color: #fff; /* Teks putih */
+    font-weight: 600;
     text-decoration: none;
-    margin-left: 5px;
+    border: 2px solid var(--logout-red);
+    border-radius: 8px;
+    background-color: var(--logout-red); /* LANGSUNG MERAH */
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    font-size: 0.95rem;
+}
+
+.logout-button:hover {
+    background-color: var(--logout-hover); /* Merah lebih tua */
+    color: #fff;
+    border-color: var(--logout-hover);
+}
+
+.logout-button i {
+    color: #fff !important;
 }
 
 /* ========================================================= */
-/* 3. MAIN CONTENT & FOOTER STYLES */
+/* 3. MAIN CONTENT (Tidak berubah) */
 /* ========================================================= */
-
-/* FIX: Wrapper Utama untuk konten sebelah kanan sidebar */
 .content-wrapper { 
-    /* DIKOREKSI: Menggunakan !important untuk memastikan margin diabaikan oleh konflik CSS global */
     margin-left: var(--sidebar-width) !important; 
-    /* Menghitung lebar agar tidak overlap */
     width: calc(100% - var(--sidebar-width)); 
     display: flex; 
     flex-direction: column; 
     min-height: 100vh;
 }
 
-/* FIX: Main Content */
 main {
     padding: 30px;
-    flex-grow: 1; /* PENTING: Mendorong footer ke bagian bawah */
-}
-/* (Styles Header Lainnya Tetap) */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0;
-}
-.welcome {
-    font-size: 1.8rem;
-    font-weight: 300;
-    color: var(--text-color);
-}
-.subtle {
-    color: #8c9fa8;
-    font-size: 0.95rem;
-}
-.controls div {
-    font-size: 0.9rem;
-    color: #6c757d;
+    flex-grow: 1;
 }
 
 /* ========================================================= */
-/* 4. COMPONENT STYLES (Tidak ada perubahan) */
+/* Ikon Fix (Tidak berubah) */
 /* ========================================================= */
-.card-custom {
-    background-color: var(--card-background);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
-    border: 1px solid #e5e5e5;
-}
-.section-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 10px;
-}
-.badge {
-    padding: 0.4em 0.8em;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    font-size: 0.85em;
-    min-width: 80px; 
-    text-align: center;
-    line-height: 1.2;
-}
-.badge-approved { background-color: #d4edda; color: #155724; }
-.badge-review { background-color: #fff3cd; color: #856404; }
-.badge-pending { background-color: #cfe2ff; color: #0d6efd; }
-.badge-rejected { background-color: #f8d7da; color: #721c24; }
-.badge-danger { background-color: #e07a5f; color: #fff; }
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0.1em 0.5em;
-    border-radius: 5px;
-    margin: 0 2px;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.current,
-.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    background: var(--primary) !important;
-    color: #fff !important;
-    border: none;
-}
-table.dataTable thead th {
-    background-color: rgba(11, 58, 46, 0.05);
-    color: var(--primary);
-    font-weight: 600;
-    border-bottom: 2px solid var(--primary);
-}
-.form-select, .form-control {
-    border-radius: 8px;
-    font-size: 0.9rem;
-    border-color: #e0e0e0;
-}
-.chart-box {
-    padding: 10px 0;
-    margin-bottom: 10px;
-}
-.list-group-item:hover {
-    background-color: #f8f9fa;
-}
-.text-success { color: var(--primary) !important; }
-.bg-success-subtle { background-color: rgba(11, 58, 46, 0.1) !important; }
-.text-warning { color: #e07a5f !important; }
-.bg-warning-subtle { background-color: rgba(224, 122, 95, 0.1) !important; }
-
-/* ========================================================= */
-/* 5. FIX IKON RAKSASA DAN OVERLAY (PERBAIKAN KRUSIAL) */
-/* ========================================================= */
-
-/* Menargetkan semua ikon Font Awesome untuk membatasi ukurannya */
 i.fas, i.fa {
-    /* Batasi ukuran font secara paksa (override potensi konflik) */
     font-size: 1.5rem !important; 
-    /* Pastikan tidak melayang bebas dan membesar karena position/transform */
     position: initial !important; 
     transform: none !important;
-    /* Tambahkan batasan dimensi */
     max-width: 50px !important; 
     max-height: 50px !important;
 }
-
 </style>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h4><i class="fas fa-seedling me-2"></i>BPDPKS Admin</h4>
+        <small style="color: rgba(255, 255, 255, 0.6);">Sistem Monitoring Beasiswa</small>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.dashboard') }}" class="sidebar-menu-link active">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.keuangan.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-wallet"></i> Informasi Keuangan
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.kerjasama.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-university"></i> Kampus & Kerjasama
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.lowongan.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-bullhorn"></i> Lowongan Kerja (CRUD)
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.datamahasiswa.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-user-graduate"></i> Data Mahasiswa (OLAP)
+            </a>
+        </li>
+
+       
+
+        <li class="sidebar-menu-item">
+            <a href="{{ route('bpdpks.feedback.index') }}" class="sidebar-menu-link">
+                <i class="fas fa-comment-dots"></i> Feedback Mahasiswa
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <a href="{{ route('logout') }}" 
+            class="logout-button"
+            onclick="event.preventDefault(); document.getElementById('bpdpks-logout-form').submit();">
+            <i class="fas fa-sign-out-alt me-2"></i> Keluar (Logout)
+        </a>
+    </div>
+</div>
+
+<form id="bpdpks-logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+    @csrf 
+</form>

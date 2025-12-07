@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Bpdpks;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Bpdpks\Keuangan;
