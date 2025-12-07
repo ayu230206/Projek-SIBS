@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Mahasiswa;
 
+use App\Models\MahasiswaDetail;
 use App\Http\Controllers\Controller;
 use App\Models\AkademikMahasiswa;
 use App\Models\DokumenMahasiswa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Mahasiswa;
+
 
 class MahasiswaAkademikController extends Controller
 {
@@ -52,5 +55,13 @@ class MahasiswaAkademikController extends Controller
         $dokumen = DokumenMahasiswa::where('user_id', $user->id)->get(); // ambil dokumen mahasiswa ini
 
         return view('mahasiswa.akademik.upload', compact('dokumen'));
+    }
+    public function ipk()
+    {
+        $mahasiswa = MahasiswaDetail::with(['user', 'kampus'])
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        return view('mahasiswa.akademik.ipk', compact('mahasiswa'));
     }
 }

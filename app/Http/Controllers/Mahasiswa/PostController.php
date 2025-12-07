@@ -38,7 +38,6 @@ class PostController extends Controller
 
         $post = new Post([
             'isi' => $request->isi,
-            // Pastikan menggunakan $user->id (PK standar)
             'user_id' => Auth::id()
         ]);
 
@@ -63,7 +62,6 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        // Otorisasi: Hanya pemilik yang boleh mengedit
         if ($post->user_id != Auth::id()) {
             return redirect()->route('mahasiswa.posts.index')->with('error', 'Tidak punya akses');
         }
@@ -76,7 +74,6 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        // Otorisasi
         if ($post->user_id != Auth::id()) {
             return redirect()->route('mahasiswa.posts.index')->with('error', 'Tidak punya akses');
         }
@@ -89,11 +86,9 @@ class PostController extends Controller
         $post->isi = $request->isi;
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
             if ($post->gambar) {
                 Storage::disk('public')->delete($post->gambar);
             }
-
             $post->gambar = $request->file('gambar')->store('posts', 'public');
         }
 
@@ -107,12 +102,10 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        // Otorisasi
         if ($post->user_id != Auth::id()) {
             return redirect()->route('mahasiswa.posts.index')->with('error', 'Tidak punya akses');
         }
 
-        // Hapus file gambar dari storage
         if ($post->gambar) {
             Storage::disk('public')->delete($post->gambar);
         }
@@ -122,7 +115,7 @@ class PostController extends Controller
         return redirect()->route('mahasiswa.posts.index')->with('success', 'Post berhasil dihapus!');
     }
 
-    // --- 8. LIKE (Method Tambahan) ---
+    // --- 8. LIKE / UNLIKE (AJAX Toggle) ---
     public function like($post_id)
     {
         $user_id = Auth::id();
@@ -133,16 +126,21 @@ class PostController extends Controller
 
         if ($like) {
             $like->delete();
-            $message = 'Unlike berhasil!';
+            $liked = false;
         } else {
             Like::create([
                 'post_id' => $post_id,
                 'user_id' => $user_id,
             ]);
-            $message = 'Like berhasil ditambahkan!';
+            $liked = true;
         }
 
-        return back()->with('success', $message);
+        $post = Post::findOrFail($post_id);
+
+        return response()->json([
+            'liked' => $liked,
+            'likes_count' => $post->likes()->count()
+        ]);
     }
 
     // --- 9. SHARE (Method Tambahan) ---

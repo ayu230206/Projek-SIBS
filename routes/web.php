@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Bpdpks\InfoKeuanganController;
 use App\Http\Controllers\Bpdpks\KampusKerjasamaController;
 use App\Http\Controllers\Bpdpks\LowonganController;
+use App\Http\Controllers\Mahasiswa\InfoLombaController;
 // ============================================
 // MAHASISWA Controllers (Imported via 'as MahasiswaFeedbackController' etc.)
 // ============================================
@@ -89,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('posts', PostController::class);
 
         // LIKE & UNLIKE
+       
         Route::post('posts/{post_id}/like', [LikeController::class, 'store'])->name('posts.like');
         Route::delete('posts/{post_id}/like', [LikeController::class, 'destroy'])->name('posts.unlike');
 
@@ -150,8 +152,11 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/upload', [MahasiswaAkademikController::class, 'uploadPage'])->name('upload.page');
             Route::post('/upload', [MahasiswaAkademikController::class, 'uploadDokumen'])->name('upload');
             Route::delete('/dokumen/{dokumen}', [MahasiswaAkademikController::class, 'destroyDokumen'])->name('dokumen.destroy');
-        });
+            Route::get('/ipk', [MahasiswaAkademikController::class, 'ipk'])
+            ->name('ipk');
 
+        });
+        
         // FEEDBACK MAHASISWA
         Route::prefix('feedback')->name('feedback.')->group(function () {
             Route::get('/', [MahasiswaFeedbackController::class, 'index'])->name('index');
@@ -163,6 +168,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('notifikasi/{id}', [NotifikasiController::class, 'destroy'])->name('notifikasi.destroy');
         Route::delete('notifikasi', [NotifikasiController::class, 'destroyAll'])->name('notifikasi.destroyAll');
     });
+
+    //info lomba
+    Route::prefix('mahasiswa')->middleware(['auth'])->group(function () {
+    Route::get('/info-lomba', [InfoLombaController::class, 'index'])->name('mahasiswa.info-lomba');
+    });    
 
     // Rute default /dashboard dialihkan ke /mahasiswa/dashboard, jika autentikasi berhasil
     Route::redirect('/dashboard', '/mahasiswa/dashboard');
