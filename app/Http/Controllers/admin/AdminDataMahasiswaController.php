@@ -45,6 +45,7 @@ class AdminDataMahasiswaController extends Controller
     public function show(MahasiswaDetail $mahasiswa)
     {
         $mahasiswa->load(['user', 'kampus']);
+        
         return view('admin.mahasiswa.show', compact('mahasiswa'));
     }
 }

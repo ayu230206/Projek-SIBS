@@ -17,7 +17,8 @@ class Lowongan extends Model
         'deskripsi', 
         'kualifikasi', 
         'deadline', 
-        'diinput_oleh_id'
+        'diinput_oleh_id',
+        'file_path'
     ];
 
     /**

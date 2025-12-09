@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bpdpks\Kampus; 
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class AdminKampusController extends Controller
@@ -53,6 +54,12 @@ class AdminKampusController extends Controller
 
         Kampus::create($validated);
 
+        ActivityLog::create([
+        'user_id' => Auth::id(),
+        'action' => 'Tambah Kampus',
+        'description' => Auth::user()->nama_lengkap . ' menambahkan kampus baru: ' . $request->nama_kampus
+    ]);
+
         return redirect()->route('admin.kampus.index')->with('success', 'Kampus berhasil ditambahkan.');
     }
 
@@ -71,6 +78,12 @@ class AdminKampusController extends Controller
 
         $kampus->update($validated);
 
+        ActivityLog::create([
+        'user_id' => Auth::id(),
+        'action' => 'Update Kampus',
+        'description' => Auth::user()->nama_lengkap . ' memperbarui data kampus: ' . $kampus->nama_kampus
+    ]);
+
         return redirect()->route('admin.kampus.index')->with('success', 'Kampus berhasil diperbarui.');
     }
 
@@ -82,6 +95,13 @@ class AdminKampusController extends Controller
         }
         
         $kampus->delete();
+
+        ActivityLog::create([
+        'user_id' => Auth::id(),
+        'action' => 'Hapus Kampus',
+        'description' => Auth::user()->nama_lengkap . ' menghapus kampus: ' . $namaKampus
+    ]);
+
         return redirect()->route('admin.kampus.index')->with('success', 'Kampus dihapus.');
     }
 }

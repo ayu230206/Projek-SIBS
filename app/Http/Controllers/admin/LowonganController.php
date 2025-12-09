@@ -87,6 +87,12 @@ class LowonganController extends Controller
             'deadline' => $request->deadline,
         ]);
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Tambah Lowongan/Magang',
+            'description' => Auth::user()->nama_lengkap . ' mempublikasikan: ' . $request->judul
+        ]);
+
         return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil ditambahkan!');
     }
 
@@ -113,6 +119,12 @@ class LowonganController extends Controller
 
         $lowongan->update($request->only(['tipe', 'judul', 'deskripsi', 'kualifikasi', 'deadline']));
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Update Lowongan',
+            'description' => Auth::user()->nama_lengkap . ' mengedit lowongan: ' . $lowongan->judul
+        ]);
+
         return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil diperbarui!');
     }
 
@@ -123,6 +135,13 @@ class LowonganController extends Controller
     {
         // Tambahkan konfirmasi penghapusan (disarankan di sisi view/frontend)
         $lowongan->delete();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Hapus Lowongan',
+            'description' => Auth::user()->nama_lengkap . ' menghapus lowongan: ' . $judul
+        ]);
+
         return redirect()->route('admin.lowongan.index')->with('success', 'Data Lowongan/Magang berhasil dihapus!');
     }
     

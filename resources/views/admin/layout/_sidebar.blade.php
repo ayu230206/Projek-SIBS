@@ -26,21 +26,7 @@
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.regis-ulang.*') ? 'bg-secondary rounded' : '' }}" 
-                href="{{ route('admin.regis-ulang.index') }}">
-                <i class="fas fa-pencil-alt me-2"></i> Registrasi Ulang
-            </a>
-        </li>
-
         <li class="nav-item mt-3 text-warning text-uppercase small fw-bold px-3">Program & Kegiatan</li>
-
-        <li class="nav-item">
-            <a class="nav-link text-white {{ request()->routeIs('admin.beasiswa.*') ? 'bg-secondary rounded' : '' }}" 
-                href="{{ route('admin.beasiswa.index') }}">
-                <i class="fas fa-calendar-alt me-2"></i> Program Beasiswa
-            </a>
-        </li>
 
         <li class="nav-item">
             <a class="nav-link text-white {{ request()->routeIs('admin.penelitian-lomba.*') ? 'bg-secondary rounded' : '' }}" 
@@ -53,6 +39,13 @@
             <a class="nav-link text-white {{ request()->routeIs('admin.lowongan.index') ? 'bg-secondary rounded' : '' }}" 
                href="{{ route('admin.lowongan.index') }}">
                 <i class="fas fa-briefcase me-2"></i> Lowongan & Magang
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-white {{ request()->routeIs('admin.forum.*') ? 'bg-secondary rounded' : '' }}" 
+                href="{{ route('admin.forum.index') }}">
+                <i class="fas fa-comments me-2"></i> Moderasi Forum
             </a>
         </li>
 

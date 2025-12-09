@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\BeasiswaProgram; // Asumsi Model BeasiswaProgram ada
+use App\Models\ActivityLog;
 
 class DataBeasiswaController extends Controller
 {
@@ -47,6 +48,12 @@ class DataBeasiswaController extends Controller
             // TODO: Logika upload file jika ada
         ]));
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Buat Program Beasiswa',
+            'description' => Auth::user()->nama_lengkap . ' membuat program: ' . $request->judul
+        ]);
+
         return redirect()->route('admin.beasiswa.index')->with('success', 'Program Beasiswa berhasil ditambahkan.');
     }
 
@@ -75,6 +82,12 @@ class DataBeasiswaController extends Controller
         ]);
 
         $program->update($request->all());
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Update Program Beasiswa',
+            'description' => Auth::user()->nama_lengkap . ' memperbarui program: ' . $program->judul
+        ]);
 
         return redirect()->route('admin.beasiswa.index')->with('success', 'Program Beasiswa berhasil diperbarui.');
     }

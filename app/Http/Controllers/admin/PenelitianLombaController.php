@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\PenelitianLomba;
+use App\Models\ActivityLog;
 
 class PenelitianLombaController extends Controller
 {
@@ -46,6 +47,12 @@ class PenelitianLombaController extends Controller
 
         PenelitianLomba::create($request->all());
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Tambah Kegiatan (' . ucfirst($request->tipe) . ')',
+            'description' => Auth::user()->nama_lengkap . ' menambahkan kegiatan baru: ' . $request->judul
+        ]);
+
         // Mengarahkan ke route index yang benar
         return redirect()->route('admin.penelitian-lomba.index')->with('success', 'Data berhasil ditambahkan.');
     }
@@ -74,6 +81,12 @@ class PenelitianLombaController extends Controller
 
         $penelitianLomba->update($request->all());
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Update Kegiatan',
+            'description' => Auth::user()->nama_lengkap . ' memperbarui kegiatan: ' . $penelitianLomba->judul
+        ]);
+
         return redirect()->route('admin.penelitian-lomba.index')->with('success', 'Data berhasil diperbarui.');
     }
 
@@ -84,6 +97,13 @@ class PenelitianLombaController extends Controller
     public function destroy(PenelitianLomba $penelitianLomba)
     {
         $penelitianLomba->delete();
+
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'action' => 'Hapus Kegiatan',
+            'description' => Auth::user()->nama_lengkap . ' menghapus kegiatan: ' . $judulLama
+        ]);
+
         return back()->with('success', 'Data berhasil dihapus.');
     }
 }
