@@ -89,11 +89,11 @@ Route::middleware(['auth'])->group(function () {
 
         // POSTS
         Route::resource('posts', PostController::class);
+        // LIKE & UNLIKE AJAX
+        Route::post('/posts/{id}/like-toggle', [LikeController::class, 'toggle'])->name('posts.like.toggle');
 
-        // LIKE & UNLIKE
-       
-        Route::post('posts/{post_id}/like', [LikeController::class, 'store'])->name('posts.like');
-        Route::delete('posts/{post_id}/like', [LikeController::class, 'destroy'])->name('posts.unlike');
+        // Route::post('posts/{post_id}/like', [LikeController::class, 'store'])->name('posts.like');
+        // Route::delete('posts/{post_id}/like', [LikeController::class, 'destroy'])->name('posts.unlike');
 
         // KOMENTAR
         Route::post('posts/{post_id}/comment', [CommentController::class, 'store'])->name('posts.comment.store');
@@ -273,12 +273,12 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
             Route::post('import', [AdminMahasiswaAkademikController::class, 'import'])->name('import.process');
         });
 
-        // Manajemen Dokumen Mahasiswa (Verifikasi) - Menggunakan AdminMahasiswaDokumenController
-        Route::prefix('dokumen')->name('dokumen.')->group(function () {
-            Route::get('/', [AdminMahasiswaDokumenController::class, 'index'])->name('index');
-            Route::get('{mahasiswaDetail}', [AdminMahasiswaDokumenController::class, 'show'])->name('show');
-            Route::post('{mahasiswaDetail}/verifikasi', [AdminMahasiswaDokumenController::class, 'verifikasi'])->name('verifikasi');
-        });
+        // // Manajemen Dokumen Mahasiswa (Verifikasi) - Menggunakan AdminMahasiswaDokumenController
+        // Route::prefix('dokumen')->name('dokumen.')->group(function () {
+        //     Route::get('/', [AdminMahasiswaDokumenController::class, 'index'])->name('index');
+        //     Route::get('{mahasiswaDetail}', [AdminMahasiswaDokumenController::class, 'show'])->name('show');
+        //     Route::post('{mahasiswaDetail}/verifikasi', [AdminMahasiswaDokumenController::class, 'verifikasi'])->name('verifikasi');
+        // });
 
         // Data Akademik / Nilai (Rute lama, dipertahankan jika Controller AdminNilaiController masih relevan)
         Route::get('nilai', [AdminNilaiController::class, 'index'])->name('nilai.index');
