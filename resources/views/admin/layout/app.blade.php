@@ -39,7 +39,7 @@
             min-height: 100vh;
             color: white;
             position: fixed;
-            top: 0;
+            top: 90px;
             left: 0;
             bottom: 0;
             overflow-y: auto;
