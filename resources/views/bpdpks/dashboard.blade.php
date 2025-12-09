@@ -4,39 +4,13 @@
 
 @section('content')
 
-{{-- ===================== HEADER ===================== --}}
-<div class="header mb-4 d-flex justify-content-between align-items-center"
-    style="
-        background:linear-gradient(135deg,#4e73df,#224abe);
-        padding:32px;
-        border-radius:22px;
-        color:white;
-        position:relative;
-        box-shadow:0 10px 30px rgba(0,0,0,0.22);
-        overflow:hidden;
-    ">
 
-    <div style="
-        position:absolute;
-        right:-60px;
-        top:-60px;
-        width:180px;
-        height:180px;
-        border-radius:50%;
-        background:rgba(255,255,255,0.15);
-        filter:blur(40px);
-    "></div>
-
+{{-- ===================== HEADER MODERN HIJAU ===================== --}}
+<div class="header-modern mb-4">
     <div>
-        <div class="fw-bolder mb-1" style="font-size:2.6rem;">👋 Welcome back,</div>
-
-        <div class="fw-bold" style="font-size:2.6rem; color:#ffe8a3;">
-            {{ Session::get('username') ?? 'bpdpks' }}
-        </div>
-
-        <div class="mt-3" style="opacity:0.9; font-size:1.15rem;">
-            Your analytics dashboard • Premium Edition
-        </div>
+        <h1 class="welcome"><span>👋 Welcome back,</span></h1>
+        <h2 class="username">{{ Session::get('username') ?? 'bpdpks' }}</h2>
+        <p class="subtle">Your analytics dashboard • Premium Edition</p>
     </div>
 
     <div class="text-end">
@@ -44,6 +18,52 @@
         <div class="fw-bolder fs-3">{{ date('F j, Y') }}</div>
     </div>
 </div>
+
+<style>
+    .header-modern {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #0b3a2e, #1f6f4b); /* Hijau segar seperti keuangan/kerjasama */
+        padding: 28px;
+        border-radius: 18px;
+        color: #fff;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+        position: relative;
+    }
+
+    .header-modern::before {
+        content: "";
+        position: absolute;
+        right: -60px;
+        top: -60px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.15);
+        filter: blur(40px);
+    }
+
+    .header-modern h1.welcome {
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .header-modern h2.username {
+        font-size: 2.6rem;
+        font-weight: 700;
+        color: #ffe8a3;
+        margin: 0;
+    }
+
+    .header-modern p.subtle {
+        font-size: 1.15rem;
+        opacity: 0.9;
+        margin-top: 0.5rem;
+    }
+</style>
+
 
 
 {{-- ===================== STAT CARDS ===================== --}}

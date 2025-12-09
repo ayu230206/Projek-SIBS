@@ -22,7 +22,9 @@ class Magang extends Model
         'status_pengajuan',
         'tanggal_pengajuan',
         'file_pendukung'
+        
     ];
+
 
     public function user()
     {

@@ -64,7 +64,6 @@
                             <strong>{{ $aplikasi->mahasiswa->nama_lengkap ?? 'N/A' }}</strong>
                             <br><small class="text-muted">ID: {{ $aplikasi->mahasiswa_id }}</small>
                             <br><small class="text-muted">Kampus: {{ $aplikasi->mahasiswa->asalKampus->nama_kampus ?? '-' }}</small>
-                            {{-- TODO: Tambahkan link ke Detail Mahasiswa jika ada --}}
                         </td>
                         <td>
                             {!! $aplikasi->getStatusBadge() !!}
@@ -74,8 +73,20 @@
                         </td>
                         <td>{{ \Carbon\Carbon::parse($aplikasi->created_at)->format('d M Y H:i') }}</td>
                         <td>
-                            {{-- Tombol untuk memicu modal proses --}}
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#prosesModal" data-aplikasi-id="{{ $aplikasi->id }}" data-mahasiswa-nama="{{ $aplikasi->mahasiswa->nama_lengkap ?? 'Pelamar' }}" data-status-saat-ini="{{ $aplikasi->status }}" data-catatan-admin="{{ $aplikasi->catatan_admin }}">
+                            {{-- 🔥 Tambahan Tombol Detail --}}
+                            <a href="{{ route('bpdpks.lowongan.aplikasi.show', $aplikasi->id) }}"
+                                class="btn btn-sm btn-info mb-1">
+                                <i class="fas fa-file-alt me-1"></i> Detail
+                            </a>
+
+                            {{-- Tombol Proses --}}
+                            <button type="button" class="btn btn-sm btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#prosesModal"
+                                data-aplikasi-id="{{ $aplikasi->id }}"
+                                data-mahasiswa-nama="{{ $aplikasi->mahasiswa->nama_lengkap ?? 'Pelamar' }}"
+                                data-status-saat-ini="{{ $aplikasi->status }}"
+                                data-catatan-admin="{{ $aplikasi->catatan_admin }}">
                                 <i class="fas fa-cogs me-1"></i> Proses
                             </button>
                         </td>
@@ -132,37 +143,24 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var prosesModal = document.getElementById('prosesModal');
-        
-        // Pastikan prosesModal ada sebelum menambahkan listener
-        if (prosesModal) { 
-            prosesModal.addEventListener('show.bs.modal', function (event) {
-                // 1. Ambil data dari tombol pemicu
-                var button = event.relatedTarget;
-                var aplikasiId = button.getAttribute('data-aplikasi-id');
-                var mahasiswaNama = button.getAttribute('data-mahasiswa-nama');
-                var statusSaatIni = button.getAttribute('data-status-saat-ini');
-                var catatanAdmin = button.getAttribute('data-catatan-admin');
+        if (!prosesModal) return;
 
-                // 2. Ambil elemen di dalam modal
-                var modalTitle = prosesModal.querySelector('#mahasiswaNama');
-                var form = prosesModal.querySelector('#formProsesAplikasi');
-                var statusSelect = prosesModal.querySelector('#statusProses');
-                var catatanTextarea = prosesModal.querySelector('#catatanAdmin');
+        prosesModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var aplikasiId = button.getAttribute('data-aplikasi-id');
+            var mahasiswaNama = button.getAttribute('data-mahasiswa-nama');
+            var statusSaatIni = button.getAttribute('data-status-saat-ini');
+            var catatanAdmin = button.getAttribute('data-catatan-admin');
 
-                // 3. Update konten modal
-                modalTitle.textContent = mahasiswaNama;
-                
-                // PERBAIKAN KUTIP BLADE
-                var baseUrl = "{{ url('bpdpks/lowongan/aplikasi') }}"; 
-                form.setAttribute('action', baseUrl + '/' + aplikasiId + '/proses');
+            document.getElementById('mahasiswaNama').textContent = mahasiswaNama;
 
-                // 4. Set nilai form saat ini
-                statusSelect.value = statusSaatIni;
+            var baseUrl = "{{ url('bpdpks/lowongan/aplikasi') }}";
+            document.getElementById('formProsesAplikasi')
+                .setAttribute('action', baseUrl + '/' + aplikasiId + '/proses');
 
-                // Pastikan catatanAdmin tidak null
-                catatanTextarea.value = catatanAdmin === 'null' ? '' : catatanAdmin;
-            });
-        }
+            document.getElementById('statusProses').value = statusSaatIni;
+            document.getElementById('catatanAdmin').value = catatanAdmin === 'null' ? '' : catatanAdmin;
+        });
     });
 </script>
 @endsection

@@ -16,6 +16,8 @@ class LowonganAplikasi extends Model
     protected $fillable = [
         'lowongan_id', 
         'mahasiswa_id', 
+           'cv',
+    'portofolio',
         'status', 
         'catatan_admin'
     ];

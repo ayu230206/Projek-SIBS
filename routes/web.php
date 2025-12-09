@@ -209,6 +209,10 @@ Route::middleware(['bpdpks'])
         // Monitoring dan Proses Aplikasi Lowongan
         Route::get('lowongan/{lowongan}/aplikasi', [LowonganController::class, 'monitoringAplikasi'])->name('lowongan.monitoring');
         Route::post('lowongan/aplikasi/{aplikasidata}/proses', [LowonganController::class, 'prosesAplikasi'])->name('lowongan.proses_aplikasi');
+     Route::get('lowongan/aplikasi/{aplikasi}', 
+    [LowonganController::class, 'detailAplikasi']
+)->name('lowongan.aplikasi.show');
+
 
         // Resource Data Mahasiswa (Hanya Show, karena Index sudah di atas)
         // URL: /bpdpks/datamahasiswa/{datamahasiswa}, Name: bpdpks.datamahasiswa.show
