@@ -18,6 +18,7 @@ class Lowongan extends Model
         'kualifikasi', 
         'deadline', 
         'diinput_oleh_id',
+<<<<<<< HEAD
         
         // 🔥 KOLOM BARU DITAMBAHKAN UNTUK MASSA ASSIGNMENT
         'foto', 
@@ -26,6 +27,9 @@ class Lowongan extends Model
         'gaji',
         'tanggal_mulai', 
         'tanggal_selesai',
+=======
+        'file_path'
+>>>>>>> 5ffacd8b772c7966c5ab86c012b6568d5b89bd69
     ];
 
     /**

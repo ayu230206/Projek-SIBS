@@ -14,6 +14,7 @@ use App\Models\Bpdpks\Kampus;
 use App\Models\Bpdpks\Lowongan;
 use App\Models\Bpdpks\Keuangan; // Pastikan Model Keuangan diimport
 use App\Models\MahasiswaDetail; // Untuk dokumen pending
+use App\Models\ActivityLog;
 
 class AdminDashboardController extends Controller
 {
@@ -59,20 +60,35 @@ class AdminDashboardController extends Controller
 
         // 2. NOTIFIKASI AKTIVITAS TERBARU (Real Data)
         // Mengambil 5 User mahasiswa yang baru mendaftar
+
+        $activities = ActivityLog::with('user')->latest()->take(6)->get();
+        $notifications = [];
+        foreach($activities as $activity) {
+            $notifications[] = [
+                'title' => $activity->action,
+                'description' => $activity->description, // Tambahan deskripsi
+                // 'time'  => $activity->created_at->diffForHumans(),
+                // 'user'  => $activity->user->nama_lengkap ?? 'Sistem',
+                // 'link'  => '#' // Bisa dikustomisasi nanti
+
+            ];
+        }
+        
         $latestUsers = User::where('role', 'mahasiswa')
                            ->orderBy('created_at', 'desc')
                            ->take(5)
                            ->get();
         
-        $notifications = [];
-        foreach($latestUsers as $user) {
-            $notifications[] = [
-                'title' => "Mahasiswa baru: {$user->nama_lengkap}",
-                'time'  => $user->created_at->diffForHumans(),
-                // Link menuju detail mahasiswa tersebut
-                'link'  => $user->detail ? route('admin.mahasiswa.data.show', $user->detail->id) : '#' 
-            ];
-        }
+                           
+        // $notifications = [];
+        // foreach($latestUsers as $user) {
+        //     $notifications[] = [
+        //         'title' => "Mahasiswa baru: {$user->nama_lengkap}",
+        //         'time'  => $user->created_at->diffForHumans(),
+        //         // Link menuju detail mahasiswa tersebut
+        //         'link'  => $user->detail ? route('admin.mahasiswa.data.show', $user->detail->id) : '#' 
+        //     ];
+        // }
 
         // Jika kosong
         if (count($notifications) == 0) {
@@ -102,8 +118,18 @@ class AdminDashboardController extends Controller
 
         if ($request->hasFile('logo')) {
             $request->file('logo')->storeAs('settings', 'website_logo.png', 'public');
+
+            if(class_exists(\App\Models\ActivityLog::class)) {
+                \App\Models\ActivityLog::create([
+                    'user_id' => Auth::id(),
+                    'action' => 'Update Logo',
+                    'description' => Auth::user()->nama_lengkap . ' memperbarui logo website.'
+                ]);
+            }
+
             return redirect()->back()->with('success', 'Logo website berhasil diperbarui!');
         }
+
 
         return redirect()->back()->with('error', 'Gagal mengupload logo.');
     }

@@ -6,7 +6,7 @@
     <div class="header">
         <div class="title-section">
             <h1 class="welcome"><i class="fas fa-trophy me-2"></i> Penelitian & Lomba</h1>
-            <p class="subtle">Kelola informasi kompetisi akademik dan riset sawit.</p>
+            <p class="subtle">Kelola informasi kompetisi akademik, riset, dan jadwal pendaftarannya.</p>
         </div>
         <div class="controls mb-4">
             <a href="{{ route('admin.penelitian-lomba.create') }}" class="btn btn-primary shadow-sm" style="background-color: var(--palm-green); border-color: var(--palm-green);">
@@ -34,9 +34,15 @@
                     <tr>
                         <th class="text-center" width="5%">No</th>
                         <th>Kategori</th>
-                        <th width="25%">Judul Kegiatan</th>
+                        <th width="20%">Judul Kegiatan</th>
                         <th>Penyelenggara</th>
-                        <th>Deskripsi Singkat</th>
+                        
+                        {{-- 1. KOLOM BARU: TANGGAL UPLOAD --}}
+                        <th>Tanggal Upload</th>
+                        
+                        {{-- 2. KOLOM BARU: DEADLINE --}}
+                        <th>Batas Pendaftaran</th>
+                        
                         <th width="15%">Aksi</th>
                     </tr>
                 </thead>
@@ -51,9 +57,42 @@
                                 <span class="badge bg-info text-dark"><i class="fas fa-microscope me-1"></i> Penelitian</span>
                             @endif
                         </td>
-                        <td><span class="fw-bold text-dark">{{ $program->judul }}</span></td>
+                        <td>
+                            <span class="fw-bold text-dark">{{ $program->judul }}</span>
+                        </td>
                         <td>{{ $program->penyelenggara ?? '-' }}</td>
-                        <td>{{ Str::limit($program->deskripsi, 60) }}</td>
+                        
+                        {{-- MENAMPILKAN TANGGAL UPLOAD --}}
+                        <td>
+                            <div class="text-muted small">
+                                <i class="far fa-calendar-plus me-1"></i>
+                                {{ $program->created_at->format('d M Y') }}
+                            </div>
+                        </td>
+
+                        {{-- MENAMPILKAN DEADLINE --}}
+                        <td>
+                            @if($program->tanggal_berakhir)
+                                @php
+                                    $deadline = \Carbon\Carbon::parse($program->tanggal_berakhir);
+                                    $isExpired = now()->greaterThan($deadline);
+                                @endphp
+
+                                @if($isExpired)
+                                    <span class="text-danger fw-bold">
+                                        <i class="fas fa-times-circle me-1"></i> {{ $deadline->format('d M Y') }}
+                                    </span>
+                                    <br><span class="badge bg-danger" style="font-size: 0.65rem;">Sudah Tutup</span>
+                                @else
+                                    <span class="text-success fw-bold">
+                                        <i class="fas fa-clock me-1"></i> {{ $deadline->format('d M Y') }}
+                                    </span>
+                                @endif
+                            @else
+                                <span class="badge bg-secondary">Tidak Ada Batas</span>
+                            @endif
+                        </td>
+
                         <td>
                             <div class="d-flex gap-1">
                                 <a href="{{ route('admin.penelitian-lomba.edit', $program->id) }}" class="btn btn-sm btn-warning text-white" title="Edit">
@@ -71,7 +110,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
+                        <td colspan="7" class="text-center py-5 text-muted">
                             <i class="fas fa-clipboard-list fa-3x mb-3 text-secondary"></i><br>
                             Tidak ada data Program Penelitian dan Lomba.
                         </td>
@@ -81,7 +120,6 @@
             </table>
         </div>
         
-        {{-- Pagination jika ada --}}
         <div class="mt-4">
             {{ $dataPenelitianLomba->links() }}
         </div>
