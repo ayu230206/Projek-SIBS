@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\MahasiswaDetail; // Pastikan model ini diimport
 use App\Models\Bpdpks\Kampus;
-use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -63,12 +62,6 @@ class UserManagementController extends Controller
             'role'         => $request->role,
             'status_aktif' => true,
         ]);
-
-        ActivityLog::create([
-        'user_id' => Auth::id(),
-        'action' => 'Tambah User Staff',
-        'description' => Auth::user()->nama_lengkap . ' menambahkan user baru (' . $request->role . '): ' . $request->nama_lengkap
-    ]);
 
         return redirect()->route('admin.users.index')->with('success', 'User Admin/BPDPKS berhasil ditambahkan.');
     }
@@ -161,12 +154,6 @@ class UserManagementController extends Controller
                 'nim'      => $request->nim
             ]);
         });
-
-        ActivityLog::create([
-        'user_id' => Auth::id(),
-        'action' => 'Tambah Mahasiswa',
-        'description' => Auth::user()->nama_lengkap . ' menambahkan mahasiswa baru: ' . $request->nama_lengkap
-    ]);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Data Mahasiswa & Akun berhasil dibuat sekaligus!');
