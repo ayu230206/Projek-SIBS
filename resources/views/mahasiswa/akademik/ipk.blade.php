@@ -18,7 +18,7 @@
             <div>
                 <p class="text-gray-500 text-sm">Nama</p>
                 <p class="font-semibold text-lg">
-                    {{ $mahasiswa->user->nama_lengkap ?? '-' }}
+                    {{ $mahasiswa->user->nama_lengkap ?? auth()->user()->nama_lengkap ?? '-' }}
                 </p>
             </div>
 
@@ -44,19 +44,22 @@
             </div>
         </div>
 
-        <!-- NILAI (IPS dihapus) -->
+        <!-- NILAI (IPK) -->
         <div class="grid md:grid-cols-1 gap-6">
-
-            <!-- IPK -->
             <div class="bg-blue-50 rounded-2xl p-6 text-center">
                 <p class="text-gray-600">IPK Saat Ini</p>
-                <h2 class="text-4xl font-extrabold text-blue-600 mt-2">
-                    {{ $mahasiswa->ipk ?? '0.00' }}
-                </h2>
-
-                <div class="mt-3">
-                    {!! $mahasiswa->ipk_badge !!}
-                </div>
+                @if(isset($mahasiswa) && $mahasiswa->ipk)
+                    <h2 class="text-4xl font-extrabold text-blue-600 mt-2">
+                        {{ $mahasiswa->ipk }}
+                    </h2>
+                    <div class="mt-3">
+                        {!! $mahasiswa->ipk_badge ?? '<span class="text-gray-500">Belum ada badge IPK</span>' !!}
+                    </div>
+                @else
+                    <h2 class="text-lg font-semibold text-red-600 mt-2">
+                        IPK Anda belum diinputkan
+                    </h2>
+                @endif
             </div>
         </div>
 

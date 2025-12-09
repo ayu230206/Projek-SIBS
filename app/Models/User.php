@@ -25,6 +25,7 @@ class User extends Authenticatable
         'nama_lengkap',
         'email',
         'password',
+        'google_id',
         'role',          // admin, bpdpks, mahasiswa
         'asal_kampus',   // ID Kampus
         'angkatan',
