@@ -11,46 +11,48 @@ use App\Notifications\LikeNotification;
 class LikeController extends Controller
 {
     /**
-     * Menyukai post
+     * LIKE / UNLIKE (AJAX)
      */
-    public function store($post_id)
+    public function toggle($post_id)
     {
-        // Ambil post
+        $user = Auth::user();
+
+        // Ambil post (404 jika tidak ada)
         $post = Post::findOrFail($post_id);
 
-        // Cek apakah sudah like
+        // Cek apakah user sudah like
         $existing = Like::where('post_id', $post_id)
-                        ->where('user_id', Auth::id())
+                        ->where('user_id', $user->id)
                         ->first();
 
         if ($existing) {
-            return back()->with('info', 'Anda sudah menyukai postingan ini.');
+            // UNLIKE
+            $existing->delete();
+
+            $count = Like::where('post_id', $post_id)->count();
+
+            return response()->json([
+                'liked' => false,
+                'likes_count' => $count,
+            ]);
         }
 
-        // Simpan like
+        // LIKE
         Like::create([
             'post_id' => $post_id,
-            'user_id' => Auth::id()
+            'user_id' => $user->id,
         ]);
 
-        // Kirim notifikasi ke pemilik post
-        // Hanya jika post bukan milik sendiri
-        if ($post->user && $post->user->id != Auth::id()) {
-            $post->user->notify(new LikeNotification($post, Auth::user()));
+        // Kirim notifikasi ke pemilik post (kecuali like sendiri)
+        if ($post->user_id != $user->id) {
+            $post->user->notify(new LikeNotification($post, $user));
         }
 
-        return back()->with('success', 'Berhasil menyukai postingan.');
-    }
+        $count = Like::where('post_id', $post_id)->count();
 
-    /**
-     * Batalkan like
-     */
-    public function destroy($post_id)
-    {
-        Like::where('post_id', $post_id)
-            ->where('user_id', Auth::id())
-            ->delete();
-
-        return back()->with('success', 'Berhasil batal menyukai.');
+        return response()->json([
+            'liked' => true,
+            'likes_count' => $count,
+        ]);
     }
 }

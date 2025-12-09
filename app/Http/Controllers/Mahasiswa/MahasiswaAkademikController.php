@@ -60,7 +60,7 @@ class MahasiswaAkademikController extends Controller
     {
         $mahasiswa = MahasiswaDetail::with(['user', 'kampus'])
             ->where('user_id', Auth::id())
-            ->firstOrFail();
+            ->first(); // ubah firstOrFail() jadi first()
 
         return view('mahasiswa.akademik.ipk', compact('mahasiswa'));
     }
